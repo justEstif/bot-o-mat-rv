@@ -1,0 +1,10 @@
+<%= form_with(model: @robot, url: robots_path) do |form| %>
+  <%= form.label :name %>
+  <%= form.text_field :name %>
+
+  <%= form.label :robot_type %>
+  <%= form.select :robot_type,
+              Robot.robot_types.keys.map { |type| [type.humanize, type] } %>
+
+  <%= form.submit "Create Robot" %>
+<% end %>

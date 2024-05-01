@@ -1,0 +1,28 @@
+<h1>All Tasks</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>ETA</th>
+      <th>Completed</th>
+      <th>Assigned</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tasks.each do |task| %>
+      <tr>
+        <td><%= task.description %></td>
+        <td><%= task.eta %></td>
+        <td><%= task.completed ? "Yes" : "No" %></td>
+        <td>
+          <% if task.robot.present? %>
+            <%= task.robot.name %>
+          <% else %>
+            Unassigned
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

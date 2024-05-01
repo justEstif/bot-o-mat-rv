@@ -1,0 +1,43 @@
+<hgroup>
+  <h1>
+    <%= @robot.name %>
+  </h1>
+  <p>
+    <%= @robot.robot_type %></p>
+</hgroup>
+
+<h3>Assigned Tasks</h3>
+
+<% flash.each do |type, msg| %>
+  <div>
+    <%= msg %>
+  </div>
+<% end %>
+
+<% if @robot.tasks.any? %>
+  <table>
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>ETA</th>
+        <th>Completed</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @robot.tasks.each do |task| %>
+        <tr>
+          <td><%= task.description %></td>
+          <td><%= task.eta %></td>
+          <td><%= task.completed ? "Yes" : "No" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <%= form_with(url: complete_tasks_robot_path(@robot), method: :post) do |form| %>
+    <%= form.submit "Complete Tasks" %>
+  <% end %>
+
+<% else %>
+  <p>No tasks assigned to this robot.</p>
+<% end %>

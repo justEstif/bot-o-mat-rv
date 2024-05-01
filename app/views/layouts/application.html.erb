@@ -8,9 +8,30 @@
 
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css"
+    />
   </head>
 
   <body>
-    <%= yield %>
+
+    <header class="container">
+      <hgroup>
+        <h1>Red Ventures</h1>
+        <p>Made by Estifanos Beyene</p>
+      </hgroup>
+      <nav>
+        <ul>
+          <li><%= link_to "Home", root_path %></li>
+          <li><%= link_to "Tasks", tasks_path %></li>
+          <li><%= link_to "New Robot", new_robot_path %></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="container">
+      <%= yield %>
+    </main>
   </body>
 </html>

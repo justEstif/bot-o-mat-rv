@@ -1,5 +1,4 @@
-<div class="grid">
-
+<section>
   <hgroup>
     <h1>
       <%= @robot.name %>
@@ -11,13 +10,8 @@
     <% end %>
   </hgroup>
 
-  <%= button_to "Delete Robot",
-  @robot,
-  method: :delete,
-  data: {
-    confirm: "Are you sure you want to delete this robot?"
-  } %>
-</div>
+  <%= link_to "Edit", edit_robot_path(@robot) %>
+</section>
 
 <h3>Assigned Tasks</h3>
 

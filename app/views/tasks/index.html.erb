@@ -3,6 +3,14 @@
   <%= link_to "New Task", new_task_path %>
 </section>
 
+<section>
+  <% flash.each do |type, msg| %>
+    <div>
+      <%= msg %>
+    </div>
+  <% end %>
+</section>
+
 <table>
   <thead>
     <tr>

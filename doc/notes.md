@@ -4,11 +4,11 @@
 
 ## How to use
 
-## Tools used
+## Technologies
 
-- Ruby on Rails
-- SQLite
-- Pico CSS(CDN)
+- Frontend: Pico CSS (CDN)
+- Backend: Ruby on Rails
+- Database: SQLite
 
 ## Why Ruby on Rails
 
@@ -39,13 +39,13 @@ for several reasons:
 The implementation is up to you: it can be a command-line application or have a
 graphical interface.
 
-- It will be a web app(graphical interface) and, if time allows, REST API routes
-  with support for CLI using curl
+- It will be a web app(graphical interface) and command line interface using
+  CURL
 
 Your application should collect a name and robot type from the types we list
 below.
 
-1. The application should collect a new and robot type
+1. The application collect a name and a predefined robot type
 
 - the robot types are predefined
 
@@ -72,6 +72,8 @@ below.
 
 ---
 
+## Initial Thought process
+
 What do we need?
 
 Two models:
@@ -84,6 +86,9 @@ Two models:
 - description
 - eta
 - completed
+
+- Later, I introduced robot_type model, and added helper functions in the robot
+  model for leaderboard, and if it can complete a task
 
 ## Robot
 
@@ -139,6 +144,57 @@ Tasks have a description and an estimated time to complete.
 ]
 ```
 
+- [x] Allow users to create multiple robots at one time
+  - user are able to create robots using curl and an api route
+- [x] Create a leaderboard for tasks completed by each Robot
+- [x] Create tasks specific for each robot type, this could work in conjunction
+      with the leaderboard. For e.g. robots that are assigned tasks that their
+      type can’t perform won’t get “credit” for finishing the task.
+  - if a robot is assigned a task with out a robot type defined, it should be
+    able to perform it
+  - else if the task has a robot type, the robot is only able to perform it if
+    it is the same robot type
+  - [x] add an optional robot_type to tasks, and if the robots are assigned the
+        task the won't be able to finish it
+- allow editing/reassigning tasks
+- allow deleting tasks/robots
+
+- Add persistance for tasks, bots and leaderboard stats i'm using sqlite to
+  persist the task, bots and leaderboard stats
+  - [x] task
+  - [x] bots
+  - [x] leaderboard
+
+## API Example (Robot Creation)
+
+```bash
+curl -X POST http://localhost:3000/api/robots \
+-H 'Content-Type: application/json' -d '[
+    {
+        "name": "Robot A",
+        "robot_type_id": 1
+    },
+    {
+        "name": "Robot B",
+        "robot_type_id": 2
+    },
+    {
+        "name": "Robot C",
+        "robot_type_id": 1
+    }
+]'
+```
+
+## Future Enhancements
+
+- Explore options for archiving or soft-deleting robots instead of permanent
+  removal.
+
+- Improve user interface design, specifically the use of rails flash for alert
+  messages
+
+---
+
 ## Types
 
 ```
@@ -151,44 +207,3 @@ Tasks have a description and an estimated time to complete.
   AERONAUTICAL: 'Aeronautical'
 }
 ```
-
-## Features to add once the core functionality is complete
-
-Be creative and have fun! Use this list or create your own features.
-
-- Allow users to create multiple robots at one time
-- [x] Create a leaderboard for tasks completed by each Robot
-- [x] Create tasks specific for each robot type, this could work in conjunction
-      with the leaderboard. For e.g. robots that are assigned tasks that their
-      type can’t perform won’t get “credit” for finishing the task.
-  - if a robot is assigned a task with out a robot type defined, it should be
-    able to perform it
-  - else if the task has a robot type, the robot is only able to perform it if
-    it is the same robot type
-  - [x] add an optional robot_type to tasks, and if the robots are assigned the
-        task the won't be able to finish it
-
-- Add persistance for tasks, bots and leaderboard stats i'm using sqlite to
-  persist the task, bots and leaderboard stats
-  - [x] task
-  - [x] bots
-  - [x] leaderboard
-
-- Points of improvements
-
-- If a robot is deleted, so are all the tasks it has completed.
-  - It might be better to archive the robot, or just mark it as deleted.
-
-- General UI improvements could be made.
-
-## Privacy Guidelines
-
-Due to the creative nature of this project, please do not post the prompt or
-your solution publicly. Feel free to privately fork it to your personal GitHub
-or download it for future reference, as this workspace is cleared every few
-months.
-
-## Authors
-
-- Scott Hoffman <https://github.com/scottshane>
-- Olivia Osby <https://github.com/oosby>

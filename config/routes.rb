@@ -15,4 +15,8 @@ Rails.application.routes.draw do
   resources :tasks
   resources :leaderboards, only: [:index]
   root "robots#index"
+
+  namespace :api, defaults: { format: "json" } do
+    resources :robots, only: [:create]
+  end
 end

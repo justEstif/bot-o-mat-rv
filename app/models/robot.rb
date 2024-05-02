@@ -1,15 +1,12 @@
 class Robot < ApplicationRecord
-  belongs_to :robot_type, optional: true
+  belongs_to :robot_type
   has_many :tasks, dependent: :destroy
 
   validates :name, presence: true
+  validates :robot_type_id, presence: true
 
   def can_perform_task?(task)
-    if robot_type.present?
-      robot_type.can_perform_task?(task)
-    else
-      true
-    end
+    robot_type.can_perform_task?(task)
   end
 
   def completed_tasks_count

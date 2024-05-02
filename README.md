@@ -16,10 +16,14 @@
 
 ### Setting up application
 
+- Note: since this is a private repository, cloning is limite to those with
+  access
+
 ```bash
 git clone https://github.com/justEstif/bot-o-mat-justEstif.git
 cd bot-o-mat-justEstif
 bundle install  # install dependencies
+bin/rails db:migrate:reset # (optional) reset dev database
 bin/rails db:migrate # run migrations
 bin/rails db:seed # seed database with sample data
 bin/rails server # start rails server

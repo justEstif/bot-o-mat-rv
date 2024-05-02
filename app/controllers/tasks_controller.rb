@@ -17,6 +17,26 @@ class TasksController < ApplicationController
     end
   end
 
+  def edit
+    @task = Task.find(params[:id])
+  end
+
+  def update
+    @task = Task.find(params[:id])
+
+    if @task.update(task_params)
+      redirect_to tasks_path, notice: "Task was successfully updated."
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @task = Task.find(params[:id])
+    @task.destroy
+    redirect_to tasks_path, notice: "Task was successfully deleted."
+  end
+
   def assign_tasks
     @robot = Robot.find(params[:id])
     unassigned_tasks = Task.where(robot_id: nil).limit(5)
@@ -36,11 +56,13 @@ class TasksController < ApplicationController
     tasks_to_complete = @robot.tasks.where(completed: false)
 
     tasks_to_complete.each do |task|
-      eta_ms = task.eta || 0
-      # sleep(eta_ms/1000)
-      sleep(eta_ms / 100000) # NOTE: using 100000 for quicker responses
-      flash[:notice] = "Working on task " + task.description
-      task.update(completed: true)
+      if @robot.can_perform_task?(task)
+        eta_ms = task.eta || 0
+        # sleep(eta_ms/1000)
+        sleep(eta_ms / 100000) # NOTE: using 100000 for quicker responses
+        flash[:notice] = "Working on task " + task.description
+        task.update(completed: true)
+      end
     end
 
     flash[:notice] = "Tasks completed successfully"
@@ -48,6 +70,6 @@ class TasksController < ApplicationController
   end
 
   def task_params
-    params.require(:task).permit(:description, :eta, :robot_type_id)
+    params.require(:task).permit(:description, :eta, :robot_type_id, :robot_id)
   end
 end

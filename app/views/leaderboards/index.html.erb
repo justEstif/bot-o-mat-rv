@@ -1,0 +1,18 @@
+<h1>Task Completion Leaderboard</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Robot Name</th>
+      <th>Completed Tasks Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @leaderboard.each do |robot| %>
+      <tr>
+        <td><%= robot.name %></td>
+        <td><%= robot.completed_tasks_count %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

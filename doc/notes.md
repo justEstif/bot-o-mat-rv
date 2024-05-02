@@ -161,12 +161,12 @@ Be creative and have fun! Use this list or create your own features.
 - Create tasks specific for each robot type, this could work in conjunction with
   the leaderboard. For e.g. robots that are assigned tasks that their type can’t
   perform won’t get “credit” for finishing the task.
-  - [ ] add an optional robot_type to tasks, and if the robots are assigned the
+  - [x] add an optional robot_type to tasks, and if the robots are assigned the
         task the won't be able to finish it
 
 - Add persistance for tasks, bots and leaderboard stats
-  - [ ] task
-  - [ ] bots
+  - [x] task
+  - [x] bots
   - [ ] leaderboard
 
 ## Privacy Guidelines

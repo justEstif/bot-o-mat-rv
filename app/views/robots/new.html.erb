@@ -7,7 +7,11 @@
   <%= form.text_field :name %>
 
   <%= form.label :robot_type_id, "Robot Type" %>
-  <%= form.collection_select :robot_type_id, RobotType.all, :id, :name %>
+  <%= form.collection_select :robot_type_id,
+                         RobotType.all,
+                         :id,
+                         :name,
+                         { include_blank: true } %>
 
   <%= form.submit "Create Robot" %>
 <% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_02_115945) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_02_130319) do
   create_table "robot_types", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
@@ -19,9 +19,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_02_115945) do
 
   create_table "robots", force: :cascade do |t|
     t.string "name"
-    t.string "robot_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "robot_type_id"
+    t.index ["robot_type_id"], name: "index_robots_on_robot_type_id"
   end
 
   create_table "tasks", force: :cascade do |t|
@@ -36,6 +37,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_02_115945) do
     t.index ["robot_type_id"], name: "index_tasks_on_robot_type_id"
   end
 
+  add_foreign_key "robots", "robot_types"
   add_foreign_key "tasks", "robot_types"
   add_foreign_key "tasks", "robots"
 end

@@ -15,7 +15,14 @@
     <% @robots.each do |robot| %>
       <tr>
         <td><%= link_to robot.name, robot_path(robot) %></td>
-        <td><%= robot.robot_type.humanize %></td>
+        <td>
+          <% if robot.robot_type %>
+            <%= robot.robot_type.name %>
+          <% else %>
+            None Assigned
+          <% end %>
+        </td>
+
         <td>
           <%= form_with(url: assign_tasks_robot_path(robot), method: :post) do |form| %>
             <%= form.submit "Assign Tasks" %>

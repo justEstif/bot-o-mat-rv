@@ -5876,3 +5876,57 @@ Processing by RobotsController#index as HTML
 Completed 200 OK in 6ms (Views: 4.0ms | ActiveRecord: 0.1ms | Allocations: 3653)
 
 
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to AddRobotTypeToRobots (20240502130228)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (32.5ms)[0m  [1m[35mALTER TABLE "robots" ADD "robot_type_id" integer[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_robots_on_robot_type_id" ON "robots" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "arobots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar DEFAULT NULL, "robot_type" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_arobots_on_robot_type_id" ON "arobots" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "arobots" ("id","name","robot_type","created_at","updated_at","robot_type_id")
+                     SELECT "id","name","robot_type","created_at","updated_at","robot_type_id" FROM "robots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "robots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "robots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar DEFAULT NULL, "robot_type" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL, CONSTRAINT "fk_rails_a8ce9b53b2"
+FOREIGN KEY ("robot_type_id")
+  REFERENCES "robot_types" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_robots_on_robot_type_id" ON "robots" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "robots" ("id","name","robot_type","created_at","updated_at","robot_type_id")
+                     SELECT "id","name","robot_type","created_at","updated_at","robot_type_id" FROM "arobots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "arobots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240502130228') RETURNING "version"[0m
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to RemoveRobotTypeFromRobots (20240502130319)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "arobots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar DEFAULT NULL, "robot_type" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_arobots_on_robot_type_id" ON "arobots" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "arobots" ("id","name","robot_type","created_at","updated_at","robot_type_id")
+                     SELECT "id","name","robot_type","created_at","updated_at","robot_type_id" FROM "robots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "robots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "robots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL, CONSTRAINT "fk_rails_a8ce9b53b2"
+FOREIGN KEY ("robot_type_id")
+  REFERENCES "robot_types" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_robots_on_robot_type_id" ON "robots" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "robots" ("id","name","created_at","updated_at","robot_type_id")
+                     SELECT "id","name","created_at","updated_at","robot_type_id" FROM "arobots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "arobots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240502130319') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m

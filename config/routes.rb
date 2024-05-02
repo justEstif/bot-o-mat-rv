@@ -13,5 +13,6 @@ Rails.application.routes.draw do
   end
 
   resources :tasks
+  resources :leaderboards, only: [:index]
   root "robots#index"
 end

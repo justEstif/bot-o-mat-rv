@@ -10,15 +10,21 @@ class RobotsController < ApplicationController
   def create
     @robot = Robot.new(robot_params)
     if @robot.save
-      redirect_to robots_path
+      redirect_to robots_path, notice: "Robot was successfully created."
     else
-      render "new"
+      render :new
     end
   end
 
   def show
     @robot = Robot.find(params[:id])
     @tasks = @robot.tasks
+  end
+
+  def destroy
+    @robot = Robot.find(params[:id])
+    @robot.destroy
+    redirect_to robots_path, notice: "Robot was successfully deleted."
   end
 
   private

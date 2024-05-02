@@ -60,7 +60,6 @@ class TasksController < ApplicationController
         eta_ms = task.eta || 0
         # sleep(eta_ms/1000)
         sleep(eta_ms / 100000) # NOTE: using 100000 for quicker responses
-        flash[:notice] = "Working on task " + task.description
         task.update(completed: true)
       end
     end

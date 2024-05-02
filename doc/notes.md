@@ -1,4 +1,4 @@
-# BOT-O-MAT
+# BOT-O-MAT by Estifanos Beyene
 
 ## Technologies
 
@@ -6,38 +6,24 @@
 - Backend: Ruby on Rails
 - Database: SQLite
 
-## Features
-
-- Multiple Robot Creation: Users can create multiple robots simultaneously using
-  curl and an API route.
-- Leaderboard: A leaderboard displays tasks completed by each robot.
-- Robot-Specific Tasks: Robots must match the required type to receive credit
-  for completing tasks.
-- Entity Management: Users can edit and/or delete tasks and robots.
-- Data Persistence: Tasks, robots, and leaderboard statistics are stored using
-  SQLite.
-
-## Why Ruby on Rails
-
-- Web GUI
-- CLI Interface: Supports a command-line interface.
-- Data Persistence: Provides data storage with SQLite.
-- Built-in supports for all features required for this app
-
-## Initial Thought Process
-
-Models
-
-1. Robot
-
-- Manages robot creation and task completion.
-- Supports leaderboard functionality.
-
-2. Task
-
-- Describes tasks with specific durations and completion states.
-
 ## How to use
+
+### Prerequisites
+
+- Ruby
+- Rails
+- Git
+
+### Setting up application
+
+```bash
+git clone https://github.com/justEstif/bot-o-mat-justEstif
+cd bot-o-mat-justEstif
+bundle install  # install dependencies
+bin/rails db:migrate # run migrations
+bin/rails db:seed # seed database with sample data
+bin/rails server # start rails server
+```
 
 ### API Example (Robot Creation)
 
@@ -59,6 +45,42 @@ curl -X POST http://localhost:3000/api/robots \
 ]'
 ```
 
+## Features
+
+- Multiple Robot Creation: Users can create multiple robots simultaneously using
+  curl and an API route.
+- Leaderboard: A leaderboard displays tasks completed by each robot.
+- Robot-Specific Tasks: Robots must match the required type to receive credit
+  for completing tasks.
+- Entity Management: Users can edit and/or delete tasks and robots.
+- Data Persistence: Tasks, robots, and leaderboard statistics are stored using
+  SQLite.
+
+## Note
+
+- The duration required to complete task has been lowered for quicker response;
+  please refer to complete_tasks method in tasks_controller
+
+## Why Ruby on Rails
+
+- Web GUI
+- CLI Interface: Supports a command-line interface.
+- Data Persistence: Provides data storage with SQLite.
+- Built-in supports for all features required for this app
+
+## Initial Thought Process
+
+Models
+
+1. Robot
+
+- Manages robot creation and task completion.
+- Supports leaderboard functionality.
+
+2. Task
+
+- Describes tasks with specific durations and completion states.
+
 ## Future Enhancements
 
 - Archiving: Explore options for archiving or soft-deleting robots.
@@ -67,8 +89,4 @@ curl -X POST http://localhost:3000/api/robots \
   - For example, showing which task a robot is currently working on. I found
     this (blog)[https://www.hotrails.dev/turbo-rails/flash-messages-hotwire]
     that explain how to go about it
-
-## Note
-
-- The duration required to complete task has been lowered for quicker response;
-  please refer to complete_tasks method in tasks_controller
+- More API routes for CLI

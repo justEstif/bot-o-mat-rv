@@ -89,6 +89,7 @@ Tasks have a description and an estimated time to complete.
 Be creative and have fun! Use this list or create your own features.
 
 - [ ] Allow users to create multiple robots at one time
+    - using curl and api route to create multiple robots
 - [ ] Create a leaderboard for tasks completed by each Robot
 - [ ] Create tasks specific for each robot type, this could work in conjunction
       with the leaderboard. For e.g. robots that are assigned tasks that their

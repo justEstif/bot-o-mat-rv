@@ -23,7 +23,8 @@ class TasksController < ApplicationController
 
     tasks_to_complete.each do |task|
       eta_ms = task.eta || 0
-      sleep(eta_ms/10000) # NOTE: using 10000 for quicker responses
+      # sleep(eta_ms/1000)
+      sleep(eta_ms / 100000) # NOTE: using 100000 for quicker responses
       flash[:notice] = "Working on task " + task.description
       task.update(completed: true)
     end

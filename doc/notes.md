@@ -1,8 +1,40 @@
 # BOT-O-MAT
 
-Use any language to complete this challenge.
+## Features
 
-- I will be using Ruby(on Rails)
+## How to use
+
+## Tools used
+
+- Ruby on Rails
+- SQLite
+- Pico CSS(CDN)
+
+## Why Ruby on Rails
+
+I chose to use Ruby on Rails for my project, considering the various features I
+wanted to implement:
+
+- Web GUI: I needed a robust web application interface.
+- CLI Interface: It was important to have a command-line interface to interact
+  with the application.
+- Data Persistence: I required data storage and management with a database.
+
+Given these requirements, Ruby on Rails appeared to be the more effective choice
+for several reasons:
+
+- Unified Project Setup: With Rails, I could set up both the web app and API
+  routes within the same project.
+- Built-in ORM: Rails provides an integrated Object-Relational Mapping (ORM)
+  system, saving time on setup and database interactions.
+- Extensive Documentation: Rails has comprehensive documentation and is
+  well-supported, making it easier to expand the app's features as needed.
+- Reduced Dependency on Third-Party Libraries: Using JavaScript frameworks like
+  React or Svelte would have necessitated integrating numerous third-party
+  libraries. For instance, persisting data in JavaScript would typically require
+  managing cookies. Additionally, creating API routes would involve using a
+  meta-framework like Next.js or SvelteKit to handle both the API endpoints and
+  the web application.
 
 The implementation is up to you: it can be a command-line application or have a
 graphical interface.
@@ -26,6 +58,8 @@ below.
    a set of five tasks. All of which complete after a duration that we show in
    milliseconds.
 
+- For the sake of development, the wait time has been decreased.
+
 4. The tasks are removed from the list when they are done
 
 - Collect a name and robot type from user.
@@ -33,6 +67,8 @@ below.
   the user
   - for example: Bipedal, Larry
 - Set up methods on Robot to complete tasks from the provided list
+
+- The tasks are marked as completed
 
 ---
 
@@ -125,7 +161,13 @@ Be creative and have fun! Use this list or create your own features.
 - Create tasks specific for each robot type, this could work in conjunction with
   the leaderboard. For e.g. robots that are assigned tasks that their type can’t
   perform won’t get “credit” for finishing the task.
+  - [ ] add an optional robot_type to tasks, and if the robots are assigned the
+        task the won't be able to finish it
+
 - Add persistance for tasks, bots and leaderboard stats
+  - [ ] task
+  - [ ] bots
+  - [ ] leaderboard
 
 ## Privacy Guidelines
 

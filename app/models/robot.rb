@@ -6,7 +6,11 @@ class Robot < ApplicationRecord
   validates :robot_type_id, presence: true
 
   def can_perform_task?(task)
-    robot_type.can_perform_task?(task)
+    if task.robot_type_id.nil?
+      true
+    else
+      robot_type.can_perform_task?(task)
+    end
   end
 
   def completed_tasks_count

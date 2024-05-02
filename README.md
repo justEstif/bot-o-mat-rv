@@ -16,7 +16,7 @@
 
 ### Setting up application
 
-- Note: since this is a private repository, cloning is limite to those with
+- Note: since this is a private repository, cloning is limited to those with
   access
 
 ```bash
@@ -28,6 +28,8 @@ bin/rails db:migrate # run migrations
 bin/rails db:seed # seed database with sample data
 bin/rails server # start rails server
 ```
+
+Go to http://localhost:3000
 
 ### API Example (Robot Creation)
 
@@ -48,6 +50,8 @@ curl -X POST http://localhost:3000/api/robots \
     }
 ]'
 ```
+
+## Screenshots
 
 ## Features
 

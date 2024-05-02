@@ -7216,3 +7216,1607 @@ Processing by RobotsController#index as HTML
 Completed 200 OK in 9ms (Views: 8.8ms | ActiveRecord: 0.2ms | Allocations: 5308)
 
 
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.0ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2024-05-02 17:01:17.778678', '2024-05-02 17:01:17.778681') RETURNING "key"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateRobots (20240501144145)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "robots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "robot_type" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240501144145') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateTasks (20240501144210)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar, "eta" integer, "completed" boolean, "robot_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_c74799e152"
+FOREIGN KEY ("robot_id")
+  REFERENCES "robots" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_id" ON "tasks" ("robot_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240501144210') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to ChangeRobotIdToNullableInTasks (20240501152046)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT NULL, "robot_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_robot_id" ON "atasks" ("robot_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "atasks" ("id","description","eta","completed","robot_id","created_at","updated_at")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at" FROM "tasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "tasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT NULL, "robot_id" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_c74799e152"
+FOREIGN KEY ("robot_id")
+  REFERENCES "robots" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_id" ON "tasks" ("robot_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "tasks" ("id","description","eta","completed","robot_id","created_at","updated_at")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at" FROM "atasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "atasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240501152046') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to ChangeCompletedDefaultInTasks (20240501162947)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT NULL, "robot_id" integer DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_robot_id" ON "atasks" ("robot_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "atasks" ("id","description","eta","completed","robot_id","created_at","updated_at")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at" FROM "tasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "tasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT 0, "robot_id" integer DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_c74799e152"
+FOREIGN KEY ("robot_id")
+  REFERENCES "robots" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_id" ON "tasks" ("robot_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "tasks" ("id","description","eta","completed","robot_id","created_at","updated_at")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at" FROM "atasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "atasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240501162947') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateRobotTypes (20240502115227)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.3ms)[0m  [1m[35mCREATE TABLE "robot_types" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240502115227') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to AddRobotTypeToTasks (20240502115945)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "tasks" ADD "robot_type_id" integer[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_type_id" ON "tasks" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT 0, "robot_id" integer DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_robot_type_id" ON "atasks" ("robot_type_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_robot_id" ON "atasks" ("robot_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "atasks" ("id","description","eta","completed","robot_id","created_at","updated_at","robot_type_id")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at","robot_type_id" FROM "tasks"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "tasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT 0, "robot_id" integer DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL, CONSTRAINT "fk_rails_c74799e152"
+FOREIGN KEY ("robot_id")
+  REFERENCES "robots" ("id")
+, CONSTRAINT "fk_rails_6b84856324"
+FOREIGN KEY ("robot_type_id")
+  REFERENCES "robot_types" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_id" ON "tasks" ("robot_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_type_id" ON "tasks" ("robot_type_id")[0m
+  [1m[35m (0.2ms)[0m  [1m[32mINSERT INTO "tasks" ("id","description","eta","completed","robot_id","created_at","updated_at","robot_type_id")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at","robot_type_id" FROM "atasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "atasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240502115945') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to AddRobotTypeToRobots (20240502130228)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.0ms)[0m  [1m[35mALTER TABLE "robots" ADD "robot_type_id" integer[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_robots_on_robot_type_id" ON "robots" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "arobots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar DEFAULT NULL, "robot_type" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_arobots_on_robot_type_id" ON "arobots" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "arobots" ("id","name","robot_type","created_at","updated_at","robot_type_id")
+                     SELECT "id","name","robot_type","created_at","updated_at","robot_type_id" FROM "robots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "robots"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "robots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar DEFAULT NULL, "robot_type" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL, CONSTRAINT "fk_rails_a8ce9b53b2"
+FOREIGN KEY ("robot_type_id")
+  REFERENCES "robot_types" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_robots_on_robot_type_id" ON "robots" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "robots" ("id","name","robot_type","created_at","updated_at","robot_type_id")
+                     SELECT "id","name","robot_type","created_at","updated_at","robot_type_id" FROM "arobots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "arobots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.2ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240502130228') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[36mcommit transaction[0m
+Migrating to RemoveRobotTypeFromRobots (20240502130319)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "arobots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar DEFAULT NULL, "robot_type" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_arobots_on_robot_type_id" ON "arobots" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "arobots" ("id","name","robot_type","created_at","updated_at","robot_type_id")
+                     SELECT "id","name","robot_type","created_at","updated_at","robot_type_id" FROM "robots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "robots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "robots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL, CONSTRAINT "fk_rails_a8ce9b53b2"
+FOREIGN KEY ("robot_type_id")
+  REFERENCES "robot_types" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_robots_on_robot_type_id" ON "robots" ("robot_type_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "robots" ("id","name","created_at","updated_at","robot_type_id")
+                     SELECT "id","name","created_at","updated_at","robot_type_id" FROM "arobots"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "arobots"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240502130319') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (0.8ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "do the dishes"], ["eta", 1000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:01:22.198603"], ["updated_at", "2024-05-02 17:01:22.198603"], ["robot_type_id", nil]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (1.0ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "sweep the house"], ["eta", 3000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:01:22.201647"], ["updated_at", "2024-05-02 17:01:22.201647"], ["robot_type_id", nil]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (1.4ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "do the laundry"], ["eta", 10000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:01:22.204962"], ["updated_at", "2024-05-02 17:01:22.204962"], ["robot_type_id", nil]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (1.0ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "take out the recycling"], ["eta", 4000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:01:22.209142"], ["updated_at", "2024-05-02 17:01:22.209142"], ["robot_type_id", nil]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (0.8ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "make a sammich"], ["eta", 7000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:01:22.211800"], ["updated_at", "2024-05-02 17:01:22.211800"], ["robot_type_id", nil]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (0.6ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "mow the lawn"], ["eta", 20000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:01:22.214400"], ["updated_at", "2024-05-02 17:01:22.214400"], ["robot_type_id", nil]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (0.6ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "rake the leaves"], ["eta", 18000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:01:22.216531"], ["updated_at", "2024-05-02 17:01:22.216531"], ["robot_type_id", nil]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (0.9ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "give the dog a bath"], ["eta", 14500], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:01:22.218564"], ["updated_at", "2024-05-02 17:01:22.218564"], ["robot_type_id", nil]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (1.3ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "bake some cookies"], ["eta", 8000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:01:22.221057"], ["updated_at", "2024-05-02 17:01:22.221057"], ["robot_type_id", nil]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (1.0ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "wash the car"], ["eta", 20000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:01:22.224803"], ["updated_at", "2024-05-02 17:01:22.224803"], ["robot_type_id", nil]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (0.7ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Unipedal"], ["created_at", "2024-05-02 17:01:22.234323"], ["updated_at", "2024-05-02 17:01:22.234323"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (1.3ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Bipedal"], ["created_at", "2024-05-02 17:01:22.236751"], ["updated_at", "2024-05-02 17:01:22.236751"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (1.0ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Quadrupedal"], ["created_at", "2024-05-02 17:01:22.240122"], ["updated_at", "2024-05-02 17:01:22.240122"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (0.6ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Arachnid"], ["created_at", "2024-05-02 17:01:22.243047"], ["updated_at", "2024-05-02 17:01:22.243047"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (0.7ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Radial"], ["created_at", "2024-05-02 17:01:22.244942"], ["updated_at", "2024-05-02 17:01:22.244942"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (0.6ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Aeronautical"], ["created_at", "2024-05-02 17:01:22.246820"], ["updated_at", "2024-05-02 17:01:22.246820"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+Started GET "/" for ::1 at 2024-05-02 13:01:52 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  Rendered robots/index.html.erb within layouts/application (Duration: 5.4ms | Allocations: 1477)
+  Rendered layout layouts/application.html.erb (Duration: 61.0ms | Allocations: 35249)
+Completed 200 OK in 97ms (Views: 61.5ms | ActiveRecord: 3.8ms | Allocations: 47066)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:06:27 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  Rendered tasks/index.html.erb within layouts/application (Duration: 26.1ms | Allocations: 17317)
+  Rendered layout layouts/application.html.erb (Duration: 28.5ms | Allocations: 18481)
+Completed 200 OK in 33ms (Views: 28.2ms | ActiveRecord: 1.1ms | Allocations: 21244)
+
+
+Started GET "/tasks/4/edit" for ::1 at 2024-05-02 13:06:28 -0400
+Processing by TasksController#edit as HTML
+  Parameters: {"id"=>"4"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:21:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/edit.html.erb:25
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/tasks/edit.html.erb:32
+  Rendered tasks/edit.html.erb within layouts/application (Duration: 28.5ms | Allocations: 6760)
+  Rendered layout layouts/application.html.erb (Duration: 31.8ms | Allocations: 7905)
+Completed 200 OK in 37ms (Views: 32.5ms | ActiveRecord: 0.7ms | Allocations: 9698)
+
+
+Started GET "/" for ::1 at 2024-05-02 13:06:28 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  Rendered robots/index.html.erb within layouts/application (Duration: 2.0ms | Allocations: 421)
+  Rendered layout layouts/application.html.erb (Duration: 7.4ms | Allocations: 1854)
+Completed 200 OK in 9ms (Views: 8.1ms | ActiveRecord: 0.1ms | Allocations: 2116)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 13:06:29 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.5ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:13
+  Rendered tasks/new.html.erb within layouts/application (Duration: 8.9ms | Allocations: 1726)
+  Rendered layout layouts/application.html.erb (Duration: 11.3ms | Allocations: 2875)
+Completed 200 OK in 14ms (Views: 11.8ms | ActiveRecord: 0.4ms | Allocations: 3238)
+
+
+Started POST "/tasks" for ::1 at 2024-05-02 13:06:36 -0400
+Processing by TasksController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "task"=>{"description"=>"Testing", "eta"=>"2", "robot_type_id"=>"4"}, "commit"=>"Create Task"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:13:in `create'
+  [1m[36mTask Create (1.3ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "Testing"], ["eta", 2], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 17:06:36.062771"], ["updated_at", "2024-05-02 17:06:36.062771"], ["robot_type_id", 4]]
+  ↳ app/controllers/tasks_controller.rb:13:in `create'
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:13:in `create'
+Redirected to http://localhost:3000/tasks
+Completed 302 Found in 22ms (ActiveRecord: 2.3ms | Allocations: 3967)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:06:36 -0400
+Processing by TasksController#index as TURBO_STREAM
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobotType Load (0.8ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 13.7ms | Allocations: 3048)
+  Rendered layout layouts/application.html.erb (Duration: 19.1ms | Allocations: 4213)
+Completed 200 OK in 22ms (Views: 19.9ms | ActiveRecord: 0.8ms | Allocations: 4551)
+
+
+Started GET "/" for ::1 at 2024-05-02 13:06:39 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.9ms | Allocations: 421)
+  Rendered layout layouts/application.html.erb (Duration: 7.2ms | Allocations: 1836)
+Completed 200 OK in 9ms (Views: 7.9ms | ActiveRecord: 0.1ms | Allocations: 2099)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 13:06:41 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.3ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:10
+  Rendered robots/new.html.erb within layouts/application (Duration: 6.2ms | Allocations: 1537)
+  Rendered layout layouts/application.html.erb (Duration: 7.7ms | Allocations: 2687)
+Completed 200 OK in 16ms (Views: 8.2ms | ActiveRecord: 0.6ms | Allocations: 5311)
+
+
+Started POST "/robots" for ::1 at 2024-05-02 13:06:44 -0400
+Processing by RobotsController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "robot"=>{"name"=>"Larry", "robot_type_id"=>"1"}, "commit"=>"Create Robot"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/robots_controller.rb:12:in `create'
+  [1m[36mRobotType Load (1.5ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:12:in `create'
+  [1m[36mRobot Create (0.2ms)[0m  [1m[32mINSERT INTO "robots" ("name", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?) RETURNING "id"[0m  [["name", "Larry"], ["created_at", "2024-05-02 17:06:44.972532"], ["updated_at", "2024-05-02 17:06:44.972532"], ["robot_type_id", 1]]
+  ↳ app/controllers/robots_controller.rb:12:in `create'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/robots_controller.rb:12:in `create'
+Redirected to http://localhost:3000/robots
+Completed 302 Found in 9ms (ActiveRecord: 1.9ms | Allocations: 4471)
+
+
+Started GET "/robots" for ::1 at 2024-05-02 13:06:44 -0400
+Processing by RobotsController#index as TURBO_STREAM
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  [1m[36mRobotType Load (0.0ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/index.html.erb:19
+  Rendered robots/index.html.erb within layouts/application (Duration: 2.4ms | Allocations: 1408)
+  Rendered layout layouts/application.html.erb (Duration: 4.0ms | Allocations: 2557)
+Completed 200 OK in 5ms (Views: 4.3ms | ActiveRecord: 0.1ms | Allocations: 2822)
+
+
+Started POST "/robots/1/assign_tasks" for ::1 at 2024-05-02 13:06:46 -0400
+Processing by TasksController#assign_tasks as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "commit"=>"Assign Tasks", "id"=>"1"}
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:41:in `assign_tasks'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:43:in `assign_tasks'
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" IS NULL LIMIT ?[0m  [["LIMIT", 5]]
+  ↳ app/controllers/tasks_controller.rb:46:in `assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTask Update (1.1ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:06:46.483221"], ["id", 1]]
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTask Update (1.2ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:06:46.486217"], ["id", 2]]
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTask Update (0.9ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:06:46.490707"], ["id", 3]]
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTask Update (1.4ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:06:46.493492"], ["id", 4]]
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTask Update (1.7ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:06:46.498270"], ["id", 5]]
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+Redirected to http://localhost:3000/robots/1
+Completed 302 Found in 26ms (ActiveRecord: 7.5ms | Allocations: 10808)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:06:46 -0400
+Processing by RobotsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 11.3ms | Allocations: 3458)
+  Rendered layout layouts/application.html.erb (Duration: 13.2ms | Allocations: 4603)
+Completed 200 OK in 18ms (Views: 13.1ms | ActiveRecord: 0.7ms | Allocations: 6349)
+
+
+Started POST "/robots/1/complete_tasks" for ::1 at 2024-05-02 13:06:51 -0400
+Processing by TasksController#complete_tasks as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "commit"=>"Complete Tasks", "id"=>"1"}
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:55:in `complete_tasks'
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ? AND "tasks"."completed" = ?[0m  [["robot_id", 1], ["completed", 0]]
+  ↳ app/controllers/tasks_controller.rb:58:in `complete_tasks'
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/models/robot.rb:9:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 1], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 2], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 3], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 4], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 5], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+Redirected to http://localhost:3000/robots/1
+Completed 302 Found in 11ms (ActiveRecord: 0.8ms | Allocations: 5055)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:06:51 -0400
+Processing by RobotsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 4.6ms | Allocations: 2057)
+  Rendered layout layouts/application.html.erb (Duration: 5.8ms | Allocations: 3202)
+Completed 200 OK in 9ms (Views: 6.0ms | ActiveRecord: 0.5ms | Allocations: 3856)
+
+
+Started GET "/" for ::1 at 2024-05-02 13:07:00 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/index.html.erb:19
+  Rendered robots/index.html.erb within layouts/application (Duration: 6.3ms | Allocations: 1372)
+  Rendered layout layouts/application.html.erb (Duration: 8.1ms | Allocations: 2521)
+Completed 200 OK in 9ms (Views: 8.4ms | ActiveRecord: 0.2ms | Allocations: 2783)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:07:00 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 11.4ms | Allocations: 4931)
+  Rendered layout layouts/application.html.erb (Duration: 12.9ms | Allocations: 6081)
+Completed 200 OK in 14ms (Views: 13.0ms | ActiveRecord: 0.5ms | Allocations: 6371)
+
+
+Started POST "/robots/1/complete_tasks" for ::1 at 2024-05-02 13:07:03 -0400
+Processing by TasksController#complete_tasks as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "commit"=>"Complete Tasks", "id"=>"1"}
+  [1m[36mRobot Load (0.3ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:55:in `complete_tasks'
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ? AND "tasks"."completed" = ?[0m  [["robot_id", 1], ["completed", 0]]
+  ↳ app/controllers/tasks_controller.rb:58:in `complete_tasks'
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/models/robot.rb:9:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 1], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 2], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 3], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 4], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 5], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+Redirected to http://localhost:3000/robots/1
+Completed 302 Found in 13ms (ActiveRecord: 1.0ms | Allocations: 4452)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:07:03 -0400
+Processing by RobotsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 4.7ms | Allocations: 2066)
+  Rendered layout layouts/application.html.erb (Duration: 5.9ms | Allocations: 3211)
+Completed 200 OK in 9ms (Views: 6.4ms | ActiveRecord: 0.4ms | Allocations: 3865)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:07:04 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 14.1ms | Allocations: 4020)
+  Rendered layout layouts/application.html.erb (Duration: 15.8ms | Allocations: 5170)
+Completed 200 OK in 17ms (Views: 15.9ms | ActiveRecord: 0.5ms | Allocations: 5460)
+
+
+Started GET "/tasks/6/edit" for ::1 at 2024-05-02 13:07:05 -0400
+Processing by TasksController#edit as HTML
+  Parameters: {"id"=>"6"}
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 6], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:21:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/edit.html.erb:25
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/tasks/edit.html.erb:32
+  Rendered tasks/edit.html.erb within layouts/application (Duration: 6.1ms | Allocations: 2190)
+  Rendered layout layouts/application.html.erb (Duration: 7.4ms | Allocations: 3350)
+Completed 200 OK in 9ms (Views: 7.5ms | ActiveRecord: 0.4ms | Allocations: 3973)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:07:09 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 11.2ms | Allocations: 4020)
+  Rendered layout layouts/application.html.erb (Duration: 12.4ms | Allocations: 5170)
+Completed 200 OK in 14ms (Views: 12.6ms | ActiveRecord: 0.4ms | Allocations: 5462)
+
+
+Started GET "/" for ::1 at 2024-05-02 13:07:49 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/index.html.erb:19
+  Rendered robots/index.html.erb within layouts/application (Duration: 4.8ms | Allocations: 1381)
+  Rendered layout layouts/application.html.erb (Duration: 8.1ms | Allocations: 2531)
+Completed 200 OK in 9ms (Views: 8.6ms | ActiveRecord: 0.2ms | Allocations: 2793)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:07:52 -0400
+Processing by RobotsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 6.8ms | Allocations: 2043)
+  Rendered layout layouts/application.html.erb (Duration: 8.9ms | Allocations: 3188)
+Completed 200 OK in 13ms (Views: 9.1ms | ActiveRecord: 0.6ms | Allocations: 3839)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:07:54 -0400
+Processing by RobotsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 6.4ms | Allocations: 2028)
+  Rendered layout layouts/application.html.erb (Duration: 7.6ms | Allocations: 3173)
+Completed 200 OK in 12ms (Views: 8.4ms | ActiveRecord: 0.6ms | Allocations: 3824)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:08:04 -0400
+Processing by RobotsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 8.3ms | Allocations: 2040)
+  Rendered layout layouts/application.html.erb (Duration: 10.4ms | Allocations: 3185)
+Completed 200 OK in 14ms (Views: 10.8ms | ActiveRecord: 0.7ms | Allocations: 3836)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:08:06 -0400
+Processing by RobotsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 6.4ms | Allocations: 2037)
+  Rendered layout layouts/application.html.erb (Duration: 7.7ms | Allocations: 3182)
+Completed 200 OK in 12ms (Views: 8.5ms | ActiveRecord: 0.4ms | Allocations: 3834)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:08:06 -0400
+Processing by RobotsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 7.4ms | Allocations: 2040)
+  Rendered layout layouts/application.html.erb (Duration: 11.5ms | Allocations: 3185)
+Completed 200 OK in 14ms (Views: 11.6ms | ActiveRecord: 0.6ms | Allocations: 3836)
+
+
+Started GET "/" for ::1 at 2024-05-02 13:08:09 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/index.html.erb:19
+  Rendered robots/index.html.erb within layouts/application (Duration: 5.4ms | Allocations: 1372)
+  Rendered layout layouts/application.html.erb (Duration: 7.8ms | Allocations: 2521)
+Completed 200 OK in 10ms (Views: 9.0ms | ActiveRecord: 0.3ms | Allocations: 2783)
+
+
+Started POST "/robots/1/assign_tasks" for ::1 at 2024-05-02 13:08:10 -0400
+Processing by TasksController#assign_tasks as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "commit"=>"Assign Tasks", "id"=>"1"}
+  [1m[36mRobot Load (0.3ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:41:in `assign_tasks'
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" IS NULL LIMIT ?[0m  [["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:43:in `assign_tasks'
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" IS NULL LIMIT ?[0m  [["LIMIT", 5]]
+  ↳ app/controllers/tasks_controller.rb:46:in `assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTask Update (1.1ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:08:10.978958"], ["id", 6]]
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTask Update (0.5ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:08:10.981957"], ["id", 7]]
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTask Update (0.5ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:08:10.983690"], ["id", 8]]
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTask Update (0.7ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:08:10.985348"], ["id", 9]]
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTask Update (1.2ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:08:10.988079"], ["id", 10]]
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:47:in `block in assign_tasks'
+Redirected to http://localhost:3000/robots/1
+Completed 302 Found in 21ms (ActiveRecord: 5.2ms | Allocations: 9753)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:08:10 -0400
+Processing by RobotsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 6.1ms | Allocations: 2172)
+  Rendered layout layouts/application.html.erb (Duration: 8.3ms | Allocations: 3317)
+Completed 200 OK in 10ms (Views: 8.3ms | ActiveRecord: 0.5ms | Allocations: 3971)
+
+
+Started POST "/robots/1/complete_tasks" for ::1 at 2024-05-02 13:08:12 -0400
+Processing by TasksController#complete_tasks as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "commit"=>"Complete Tasks", "id"=>"1"}
+  [1m[36mRobot Load (0.3ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:55:in `complete_tasks'
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ? AND "tasks"."completed" = ?[0m  [["robot_id", 1], ["completed", 0]]
+  ↳ app/controllers/tasks_controller.rb:58:in `complete_tasks'
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/models/robot.rb:9:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 1], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 2], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 3], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 4], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 5], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 6], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 7], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 8], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.0ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 9], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 10], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+Redirected to http://localhost:3000/robots/1
+Completed 302 Found in 13ms (ActiveRecord: 0.9ms | Allocations: 6941)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:08:12 -0400
+Processing by RobotsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.4ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.0ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 2.8ms | Allocations: 2192)
+  Rendered layout layouts/application.html.erb (Duration: 4.0ms | Allocations: 3337)
+Completed 200 OK in 7ms (Views: 4.2ms | ActiveRecord: 0.5ms | Allocations: 3991)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:08:46 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 16.7ms | Allocations: 6319)
+  Rendered layout layouts/application.html.erb (Duration: 18.0ms | Allocations: 7484)
+Completed 200 OK in 19ms (Views: 18.0ms | ActiveRecord: 0.6ms | Allocations: 7775)
+
+
+Started GET "/tasks/1/edit" for ::1 at 2024-05-02 13:08:47 -0400
+Processing by TasksController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:21:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/edit.html.erb:25
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/tasks/edit.html.erb:32
+  Rendered tasks/edit.html.erb within layouts/application (Duration: 7.0ms | Allocations: 2169)
+  Rendered layout layouts/application.html.erb (Duration: 10.3ms | Allocations: 3314)
+Completed 200 OK in 14ms (Views: 10.9ms | ActiveRecord: 0.3ms | Allocations: 3937)
+
+
+Started GET "/tasks/1/edit" for ::1 at 2024-05-02 13:08:47 -0400
+Processing by TasksController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:21:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/edit.html.erb:25
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/tasks/edit.html.erb:32
+  Rendered tasks/edit.html.erb within layouts/application (Duration: 4.8ms | Allocations: 2207)
+  Rendered layout layouts/application.html.erb (Duration: 7.6ms | Allocations: 3352)
+Completed 200 OK in 11ms (Views: 8.7ms | ActiveRecord: 0.3ms | Allocations: 3974)
+
+
+Started PATCH "/tasks/1" for ::1 at 2024-05-02 13:08:52 -0400
+Processing by TasksController#update as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "task"=>{"description"=>"do the dishes", "eta"=>"1000", "robot_type_id"=>"1", "robot_id"=>"1"}, "commit"=>"Update Task", "id"=>"1"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:25:in `update'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:27:in `update'
+  [1m[36mTask Update (1.2ms)[0m  [1m[33mUPDATE "tasks" SET "updated_at" = ?, "robot_type_id" = ? WHERE "tasks"."id" = ?[0m  [["updated_at", "2024-05-02 17:08:52.365361"], ["robot_type_id", 1], ["id", 1]]
+  ↳ app/controllers/tasks_controller.rb:27:in `update'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:27:in `update'
+Redirected to http://localhost:3000/tasks
+Completed 302 Found in 8ms (ActiveRecord: 1.5ms | Allocations: 2493)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:08:52 -0400
+Processing by TasksController#index as TURBO_STREAM
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.0ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 19.2ms | Allocations: 6846)
+  Rendered layout layouts/application.html.erb (Duration: 21.5ms | Allocations: 7997)
+Completed 200 OK in 24ms (Views: 21.7ms | ActiveRecord: 0.6ms | Allocations: 8290)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:08:53 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 14.3ms | Allocations: 6823)
+  Rendered layout layouts/application.html.erb (Duration: 15.7ms | Allocations: 7973)
+Completed 200 OK in 17ms (Views: 15.7ms | ActiveRecord: 0.6ms | Allocations: 8263)
+
+
+Started GET "/tasks/2/edit" for ::1 at 2024-05-02 13:08:54 -0400
+Processing by TasksController#edit as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:21:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/edit.html.erb:25
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/tasks/edit.html.erb:32
+  Rendered tasks/edit.html.erb within layouts/application (Duration: 6.9ms | Allocations: 2184)
+  Rendered layout layouts/application.html.erb (Duration: 8.9ms | Allocations: 3329)
+Completed 200 OK in 12ms (Views: 9.6ms | ActiveRecord: 0.4ms | Allocations: 3950)
+
+
+Started GET "/" for ::1 at 2024-05-02 13:08:55 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  [1m[36mRobotType Load (0.3ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/index.html.erb:19
+  Rendered robots/index.html.erb within layouts/application (Duration: 5.6ms | Allocations: 1357)
+  Rendered layout layouts/application.html.erb (Duration: 9.0ms | Allocations: 2506)
+Completed 200 OK in 10ms (Views: 9.4ms | ActiveRecord: 0.4ms | Allocations: 2768)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:08:56 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 15.5ms | Allocations: 6826)
+  Rendered layout layouts/application.html.erb (Duration: 16.7ms | Allocations: 7976)
+Completed 200 OK in 18ms (Views: 16.6ms | ActiveRecord: 0.6ms | Allocations: 8266)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:08:57 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  [1m[36mCACHE Robot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 15.8ms | Allocations: 6820)
+  Rendered layout layouts/application.html.erb (Duration: 17.5ms | Allocations: 7970)
+Completed 200 OK in 19ms (Views: 17.7ms | ActiveRecord: 0.6ms | Allocations: 8260)
+
+
+Started GET "/leaderboards" for ::1 at 2024-05-02 13:08:57 -0400
+Processing by LeaderboardsController#index as HTML
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/models/robot.rb:17:in `sort_by'
+  [1m[36mTask Count (0.2ms)[0m  [1m[34mSELECT COUNT(*) FROM "tasks" WHERE "tasks"."robot_id" = ? AND "tasks"."completed" = ?[0m  [["robot_id", 1], ["completed", 1]]
+  ↳ app/models/robot.rb:13:in `completed_tasks_count'
+  Rendering layout layouts/application.html.erb
+  Rendering leaderboards/index.html.erb within layouts/application
+  [1m[36mCACHE Task Count (0.0ms)[0m  [1m[34mSELECT COUNT(*) FROM "tasks" WHERE "tasks"."robot_id" = ? AND "tasks"."completed" = ?[0m  [["robot_id", 1], ["completed", 1]]
+  ↳ app/models/robot.rb:13:in `completed_tasks_count'
+  Rendered leaderboards/index.html.erb within layouts/application (Duration: 1.1ms | Allocations: 625)
+  Rendered layout layouts/application.html.erb (Duration: 3.0ms | Allocations: 2067)
+Completed 200 OK in 6ms (Views: 3.5ms | ActiveRecord: 0.3ms | Allocations: 3599)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:08:57 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.4ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 15.4ms | Allocations: 6817)
+  Rendered layout layouts/application.html.erb (Duration: 16.7ms | Allocations: 7967)
+Completed 200 OK in 18ms (Views: 16.7ms | ActiveRecord: 0.7ms | Allocations: 8257)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:08:58 -0400
+Processing by RobotsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 6.6ms | Allocations: 2157)
+  Rendered layout layouts/application.html.erb (Duration: 7.8ms | Allocations: 3317)
+Completed 200 OK in 11ms (Views: 7.8ms | ActiveRecord: 0.7ms | Allocations: 3970)
+
+
+Started POST "/robots/1/complete_tasks" for ::1 at 2024-05-02 13:09:00 -0400
+Processing by TasksController#complete_tasks as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "commit"=>"Complete Tasks", "id"=>"1"}
+  [1m[36mRobot Load (0.3ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:55:in `complete_tasks'
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ? AND "tasks"."completed" = ?[0m  [["robot_id", 1], ["completed", 0]]
+  ↳ app/controllers/tasks_controller.rb:58:in `complete_tasks'
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/models/robot.rb:9:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 1], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Update (0.7ms)[0m  [1m[33mUPDATE "tasks" SET "completed" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["completed", 1], ["updated_at", "2024-05-02 17:09:00.817396"], ["id", 1]]
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 2], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 3], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 4], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 5], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 6], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.4ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 7], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 8], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 9], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 10], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+Redirected to http://localhost:3000/robots/1
+Completed 302 Found in 25ms (ActiveRecord: 2.8ms | Allocations: 8496)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:09:00 -0400
+Processing by RobotsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 7.3ms | Allocations: 2179)
+  Rendered layout layouts/application.html.erb (Duration: 9.0ms | Allocations: 3324)
+Completed 200 OK in 12ms (Views: 9.0ms | ActiveRecord: 0.6ms | Allocations: 3979)
+
+
+Started GET "/robots/1/edit" for ::1 at 2024-05-02 13:09:20 -0400
+Processing by RobotsController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:25:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/edit.html.erb:10
+  Rendered robots/edit.html.erb within layouts/application (Duration: 4.8ms | Allocations: 1666)
+  Rendered layout layouts/application.html.erb (Duration: 6.3ms | Allocations: 2811)
+Completed 200 OK in 11ms (Views: 7.1ms | ActiveRecord: 0.2ms | Allocations: 3494)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:11:09 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 13.2ms | Allocations: 5813)
+  Rendered layout layouts/application.html.erb (Duration: 14.4ms | Allocations: 6964)
+Completed 200 OK in 16ms (Views: 14.6ms | ActiveRecord: 0.5ms | Allocations: 7254)
+
+
+Started GET "/tasks/8/edit" for ::1 at 2024-05-02 13:11:14 -0400
+Processing by TasksController#edit as HTML
+  Parameters: {"id"=>"8"}
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 8], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:21:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/edit.html.erb:25
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/tasks/edit.html.erb:32
+  Rendered tasks/edit.html.erb within layouts/application (Duration: 6.0ms | Allocations: 2178)
+  Rendered layout layouts/application.html.erb (Duration: 8.2ms | Allocations: 3323)
+Completed 200 OK in 10ms (Views: 8.5ms | ActiveRecord: 0.3ms | Allocations: 3944)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:16:53 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.7ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mCACHE Robot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 20.5ms | Allocations: 19096)
+  Rendered layout layouts/application.html.erb (Duration: 38.4ms | Allocations: 33667)
+Completed 200 OK in 43ms (Views: 38.5ms | ActiveRecord: 1.4ms | Allocations: 36046)
+
+
+Started GET "/tasks/2/edit" for ::1 at 2024-05-02 13:16:54 -0400
+Processing by TasksController#edit as HTML
+  Parameters: {"id"=>"2"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:21:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/edit.html.erb:25
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/tasks/edit.html.erb:32
+  Rendered tasks/edit.html.erb within layouts/application (Duration: 6.9ms | Allocations: 2834)
+  Rendered layout layouts/application.html.erb (Duration: 8.1ms | Allocations: 3981)
+Completed 200 OK in 13ms (Views: 8.6ms | ActiveRecord: 0.6ms | Allocations: 5287)
+
+
+Started GET "/" for ::1 at 2024-05-02 13:16:55 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/index.html.erb:19
+  Rendered robots/index.html.erb within layouts/application (Duration: 7.2ms | Allocations: 3048)
+  Rendered layout layouts/application.html.erb (Duration: 9.6ms | Allocations: 4200)
+Completed 200 OK in 12ms (Views: 10.9ms | ActiveRecord: 0.2ms | Allocations: 4668)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:16:57 -0400
+Processing by RobotsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.5ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 9.5ms | Allocations: 3556)
+  Rendered layout layouts/application.html.erb (Duration: 11.0ms | Allocations: 4702)
+Completed 200 OK in 14ms (Views: 10.7ms | ActiveRecord: 0.9ms | Allocations: 6373)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:16:57 -0400
+Processing by RobotsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.3ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.3ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 7.9ms | Allocations: 2172)
+  Rendered layout layouts/application.html.erb (Duration: 9.6ms | Allocations: 3317)
+Completed 200 OK in 13ms (Views: 10.0ms | ActiveRecord: 0.8ms | Allocations: 3968)
+
+
+Started POST "/robots/1/complete_tasks" for ::1 at 2024-05-02 13:16:59 -0400
+Processing by TasksController#complete_tasks as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "commit"=>"Complete Tasks", "id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:55:in `complete_tasks'
+  [1m[36mTask Load (0.5ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ? AND "tasks"."completed" = ?[0m  [["robot_id", 1], ["completed", 0]]
+  ↳ app/controllers/tasks_controller.rb:58:in `complete_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Update (1.3ms)[0m  [1m[33mUPDATE "tasks" SET "completed" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["completed", 1], ["updated_at", "2024-05-02 17:16:59.246344"], ["id", 2]]
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.9ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Update (0.6ms)[0m  [1m[33mUPDATE "tasks" SET "completed" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["completed", 1], ["updated_at", "2024-05-02 17:16:59.250934"], ["id", 3]]
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Update (0.6ms)[0m  [1m[33mUPDATE "tasks" SET "completed" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["completed", 1], ["updated_at", "2024-05-02 17:16:59.252984"], ["id", 4]]
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Update (0.9ms)[0m  [1m[33mUPDATE "tasks" SET "completed" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["completed", 1], ["updated_at", "2024-05-02 17:16:59.254809"], ["id", 5]]
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Update (1.0ms)[0m  [1m[33mUPDATE "tasks" SET "completed" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["completed", 1], ["updated_at", "2024-05-02 17:16:59.258344"], ["id", 6]]
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Update (0.8ms)[0m  [1m[33mUPDATE "tasks" SET "completed" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["completed", 1], ["updated_at", "2024-05-02 17:16:59.262051"], ["id", 7]]
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Update (0.5ms)[0m  [1m[33mUPDATE "tasks" SET "completed" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["completed", 1], ["updated_at", "2024-05-02 17:16:59.264519"], ["id", 8]]
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Update (0.5ms)[0m  [1m[33mUPDATE "tasks" SET "completed" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["completed", 1], ["updated_at", "2024-05-02 17:16:59.266255"], ["id", 9]]
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTask Update (0.7ms)[0m  [1m[33mUPDATE "tasks" SET "completed" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["completed", 1], ["updated_at", "2024-05-02 17:16:59.267864"], ["id", 10]]
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:63:in `block in complete_tasks'
+Redirected to http://localhost:3000/robots/1
+Completed 302 Found in 31ms (ActiveRecord: 9.1ms | Allocations: 16193)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:16:59 -0400
+Processing by RobotsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.0ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 3.1ms | Allocations: 2190)
+  Rendered layout layouts/application.html.erb (Duration: 4.2ms | Allocations: 3335)
+Completed 200 OK in 6ms (Views: 4.3ms | ActiveRecord: 0.3ms | Allocations: 4032)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:17:09 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 32.2ms | Allocations: 12131)
+  Rendered layout layouts/application.html.erb (Duration: 44.6ms | Allocations: 26688)
+Completed 200 OK in 55ms (Views: 45.9ms | ActiveRecord: 2.7ms | Allocations: 29641)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 13:17:11 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:13
+  Rendered tasks/new.html.erb within layouts/application (Duration: 5.9ms | Allocations: 1844)
+  Rendered layout layouts/application.html.erb (Duration: 8.2ms | Allocations: 2994)
+Completed 200 OK in 10ms (Views: 8.6ms | ActiveRecord: 0.2ms | Allocations: 3334)
+
+
+Started GET "/tasks/11/edit" for ::1 at 2024-05-02 13:17:13 -0400
+Processing by TasksController#edit as HTML
+  Parameters: {"id"=>"11"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 11], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:21:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/edit.html.erb:25
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/tasks/edit.html.erb:32
+  Rendered tasks/edit.html.erb within layouts/application (Duration: 8.9ms | Allocations: 5046)
+  Rendered layout layouts/application.html.erb (Duration: 10.5ms | Allocations: 6191)
+Completed 200 OK in 15ms (Views: 10.7ms | ActiveRecord: 0.7ms | Allocations: 7493)
+
+
+Started PATCH "/tasks/11" for ::1 at 2024-05-02 13:17:17 -0400
+Processing by TasksController#update as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "task"=>{"description"=>"Testing", "eta"=>"2", "robot_type_id"=>"4", "robot_id"=>"1"}, "commit"=>"Update Task", "id"=>"11"}
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 11], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:25:in `update'
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:27:in `update'
+  [1m[36mTask Update (0.9ms)[0m  [1m[33mUPDATE "tasks" SET "robot_id" = ?, "updated_at" = ? WHERE "tasks"."id" = ?[0m  [["robot_id", 1], ["updated_at", "2024-05-02 17:17:17.430794"], ["id", 11]]
+  ↳ app/controllers/tasks_controller.rb:27:in `update'
+  [1m[36mTRANSACTION (1.2ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:27:in `update'
+Redirected to http://localhost:3000/tasks
+Completed 302 Found in 8ms (ActiveRecord: 2.3ms | Allocations: 2681)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 13:17:17 -0400
+Processing by TasksController#index as TURBO_STREAM
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:24
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:32
+  [1m[36mRobotType Load (0.0ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 4], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:40
+  Rendered tasks/index.html.erb within layouts/application (Duration: 4.8ms | Allocations: 2761)
+  Rendered layout layouts/application.html.erb (Duration: 6.0ms | Allocations: 3911)
+Completed 200 OK in 7ms (Views: 6.3ms | ActiveRecord: 0.3ms | Allocations: 4247)
+
+
+Started GET "/tasks/11/edit" for ::1 at 2024-05-02 13:17:18 -0400
+Processing by TasksController#edit as HTML
+  Parameters: {"id"=>"11"}
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 11], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:21:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/edit.html.erb:25
+  [1m[36mRobot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/tasks/edit.html.erb:32
+  Rendered tasks/edit.html.erb within layouts/application (Duration: 4.9ms | Allocations: 2198)
+  Rendered layout layouts/application.html.erb (Duration: 7.1ms | Allocations: 3343)
+Completed 200 OK in 9ms (Views: 7.5ms | ActiveRecord: 0.2ms | Allocations: 3964)
+
+
+Started GET "/tasks/11/edit" for ::1 at 2024-05-02 13:17:19 -0400
+Processing by TasksController#edit as HTML
+  Parameters: {"id"=>"11"}
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."id" = ? LIMIT ?[0m  [["id", 11], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:21:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/edit.html.erb:25
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/tasks/edit.html.erb:32
+  Rendered tasks/edit.html.erb within layouts/application (Duration: 7.4ms | Allocations: 2185)
+  Rendered layout layouts/application.html.erb (Duration: 9.4ms | Allocations: 3330)
+Completed 200 OK in 12ms (Views: 9.6ms | ActiveRecord: 0.4ms | Allocations: 3951)
+
+
+Started GET "/" for ::1 at 2024-05-02 13:17:20 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/index.html.erb:19
+  Rendered robots/index.html.erb within layouts/application (Duration: 6.3ms | Allocations: 3028)
+  Rendered layout layouts/application.html.erb (Duration: 8.3ms | Allocations: 4180)
+Completed 200 OK in 10ms (Views: 8.9ms | ActiveRecord: 0.2ms | Allocations: 4648)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:17:21 -0400
+Processing by RobotsController#show as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.2ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 8.4ms | Allocations: 3577)
+  Rendered layout layouts/application.html.erb (Duration: 9.8ms | Allocations: 4722)
+Completed 200 OK in 14ms (Views: 9.8ms | ActiveRecord: 0.5ms | Allocations: 6393)
+
+
+Started GET "/robots/1/edit" for ::1 at 2024-05-02 13:17:22 -0400
+Processing by RobotsController#edit as HTML
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:25:in `edit'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/edit.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/edit.html.erb:10
+  Rendered robots/edit.html.erb within layouts/application (Duration: 5.0ms | Allocations: 1685)
+  Rendered layout layouts/application.html.erb (Duration: 8.8ms | Allocations: 2830)
+Completed 200 OK in 11ms (Views: 9.2ms | ActiveRecord: 0.2ms | Allocations: 3512)
+
+
+Started POST "/robots/1/complete_tasks" for ::1 at 2024-05-02 13:17:23 -0400
+Processing by TasksController#complete_tasks as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "commit"=>"Complete Tasks", "id"=>"1"}
+  [1m[36mRobot Load (0.2ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:55:in `complete_tasks'
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ? AND "tasks"."completed" = ?[0m  [["robot_id", 1], ["completed", 0]]
+  ↳ app/controllers/tasks_controller.rb:58:in `complete_tasks'
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/models/robot.rb:12:in `can_perform_task?'
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_type_id" = ? AND "tasks"."id" = ? LIMIT ?[0m  [["robot_type_id", 1], ["id", 11], ["LIMIT", 1]]
+  ↳ app/models/robot_type.rb:6:in `can_perform_task?'
+Redirected to http://localhost:3000/robots/1
+Completed 302 Found in 9ms (ActiveRecord: 0.5ms | Allocations: 3121)
+
+
+Started GET "/robots/1" for ::1 at 2024-05-02 13:17:23 -0400
+Processing by RobotsController#show as TURBO_STREAM
+  Parameters: {"id"=>"1"}
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots" WHERE "robots"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/controllers/robots_controller.rb:20:in `show'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/show.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:6
+  [1m[36mTask Exists? (0.1ms)[0m  [1m[34mSELECT 1 AS one FROM "tasks" WHERE "tasks"."robot_id" = ? LIMIT ?[0m  [["robot_id", 1], ["LIMIT", 1]]
+  ↳ app/views/robots/show.html.erb:24
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."robot_id" = ?[0m  [["robot_id", 1]]
+  ↳ app/views/robots/show.html.erb:34
+  Rendered robots/show.html.erb within layouts/application (Duration: 5.2ms | Allocations: 2214)
+  Rendered layout layouts/application.html.erb (Duration: 6.8ms | Allocations: 3359)
+Completed 200 OK in 8ms (Views: 6.9ms | ActiveRecord: 0.4ms | Allocations: 4013)
+
+

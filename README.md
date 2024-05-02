@@ -87,6 +87,6 @@ Models
 - UI Improvements: Enhance user interface design, utilize Rails flash for alert
   messages.
   - For example, showing which task a robot is currently working on. I found
-    this (blog)[https://www.hotrails.dev/turbo-rails/flash-messages-hotwire]
+    this [blog](https://www.hotrails.dev/turbo-rails/flash-messages-hotwire)
     that explain how to go about it
 - More API routes for CLI

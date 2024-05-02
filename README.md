@@ -51,8 +51,6 @@ curl -X POST http://localhost:3000/api/robots \
 ]'
 ```
 
-## Screenshots
-
 ## Features
 
 - Multiple Robot Creation: Users can create multiple robots simultaneously using
@@ -68,6 +66,16 @@ curl -X POST http://localhost:3000/api/robots \
 
 - The duration required to complete task has been lowered for quicker response;
   please refer to complete_tasks method in tasks_controller
+
+## Screenshots
+
+![all-tasks](public/screenshots/all-tasks.png)
+![all-robots](public/screenshots/all-robots.png)
+![create-task](public/screenshots/create-task.png)
+![edit-task](public/screenshots/edit-task.png)
+![create-robot](public/screenshots/create-robot.png)
+![edit-robot](public/screenshots/edit-robot.png)
+![leaderboard](public/screenshots/leaderboard.png)
 
 ## Why Ruby on Rails
 

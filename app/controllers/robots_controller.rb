@@ -24,6 +24,6 @@ class RobotsController < ApplicationController
   private
 
   def robot_params
-    params.require(:robot).permit(:name, :robot_type)
+    params.require(:robot).permit(:name, :robot_type_id)
   end
 end

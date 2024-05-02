@@ -55,4 +55,13 @@ tasks_list.each do |task_info|
   Task.create!(description: task_info[:description], eta: task_info[:eta], completed: false)
 end
 
+RobotType.create!([
+  { name: "Unipedal" },
+  { name: "Bipedal" },
+  { name: "Quadrupedal" },
+  { name: "Arachnid" },
+  { name: "Radial" },
+  { name: "Aeronautical" },
+])
+
 puts "Seed data created successfully!"

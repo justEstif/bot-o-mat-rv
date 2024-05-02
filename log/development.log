@@ -4803,3 +4803,221 @@ Processing by TasksController#index as HTML
 Completed 200 OK in 13ms (Views: 12.0ms | ActiveRecord: 0.5ms | Allocations: 6076)
 
 
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateRobotTypes (20240502115227)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (1.8ms)[0m  [1m[35mCREATE TABLE "robot_types" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240502115227') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "schema_migrations" ("version" varchar NOT NULL PRIMARY KEY)[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TABLE "ar_internal_metadata" ("key" varchar NOT NULL PRIMARY KEY, "value" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.1ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::InternalMetadata Create (0.1ms)[0m  [1m[32mINSERT INTO "ar_internal_metadata" ("key", "value", "created_at", "updated_at") VALUES ('environment', 'development', '2024-05-02 11:55:23.183860', '2024-05-02 11:55:23.183863') RETURNING "key"[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to CreateRobots (20240501144145)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.8ms)[0m  [1m[35mCREATE TABLE "robots" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "robot_type" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.3ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240501144145') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateTasks (20240501144210)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.9ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar, "eta" integer, "completed" boolean, "robot_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_c74799e152"
+FOREIGN KEY ("robot_id")
+  REFERENCES "robots" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_id" ON "tasks" ("robot_id")[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240501144210') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to ChangeRobotIdToNullableInTasks (20240501152046)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT NULL, "robot_id" integer NOT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_robot_id" ON "atasks" ("robot_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "atasks" ("id","description","eta","completed","robot_id","created_at","updated_at")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at" FROM "tasks"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mDROP TABLE "tasks"[0m
+  [1m[35m (0.3ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT NULL, "robot_id" integer, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_c74799e152"
+FOREIGN KEY ("robot_id")
+  REFERENCES "robots" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_id" ON "tasks" ("robot_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[32mINSERT INTO "tasks" ("id","description","eta","completed","robot_id","created_at","updated_at")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at" FROM "atasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "atasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240501152046') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to ChangeCompletedDefaultInTasks (20240501162947)
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT NULL, "robot_id" integer DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_robot_id" ON "atasks" ("robot_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "atasks" ("id","description","eta","completed","robot_id","created_at","updated_at")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at" FROM "tasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "tasks"[0m
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT 0, "robot_id" integer DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, CONSTRAINT "fk_rails_c74799e152"
+FOREIGN KEY ("robot_id")
+  REFERENCES "robots" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_id" ON "tasks" ("robot_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "tasks" ("id","description","eta","completed","robot_id","created_at","updated_at")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at" FROM "atasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mDROP TABLE "atasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240501162947') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Migrating to CreateRobotTypes (20240502115227)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (0.7ms)[0m  [1m[35mCREATE TABLE "robot_types" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "name" varchar, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL)[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240502115227') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.0ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/tasks" for ::1 at 2024-05-02 07:55:36 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:13
+  Rendered tasks/index.html.erb within layouts/application (Duration: 3.9ms | Allocations: 1288)
+Started GET "/" for ::1 at 2024-05-02 07:55:36 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (1.4ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:12
+  Rendered robots/index.html.erb within layouts/application (Duration: 5.4ms | Allocations: 2114)
+  Rendered layout layouts/application.html.erb (Duration: 127.7ms | Allocations: 48843)
+  Rendered layout layouts/application.html.erb (Duration: 32.6ms | Allocations: 23406)
+Completed 200 OK in 162ms (Views: 130.9ms | ActiveRecord: 2.2ms | Allocations: 60334)
+
+
+Completed 200 OK in 48ms (Views: 32.4ms | ActiveRecord: 2.0ms | Allocations: 26765)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 07:55:38 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 10.5ms | Allocations: 3716)
+  Rendered layout layouts/application.html.erb (Duration: 13.0ms | Allocations: 4866)
+Completed 200 OK in 25ms (Views: 13.2ms | ActiveRecord: 1.2ms | Allocations: 13460)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 07:55:39 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 2.8ms | Allocations: 1090)
+  Rendered layout layouts/application.html.erb (Duration: 4.4ms | Allocations: 2239)
+Completed 200 OK in 5ms (Views: 4.7ms | ActiveRecord: 0.1ms | Allocations: 2504)
+
+
+Started POST "/robots" for ::1 at 2024-05-02 07:55:43 -0400
+Processing by RobotsController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "robot"=>{"name"=>""}, "commit"=>"Create Robot"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/robots_controller.rb:12:in `create'
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[31mrollback transaction[0m
+  ↳ app/controllers/robots_controller.rb:12:in `create'
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.0ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 1.7ms | Allocations: 1386)
+  Rendered layout layouts/application.html.erb (Duration: 4.4ms | Allocations: 2531)
+Completed 200 OK in 12ms (Views: 5.0ms | ActiveRecord: 1.1ms | Allocations: 6427)
+
+
+Started POST "/robots" for ::1 at 2024-05-02 07:55:47 -0400
+Processing by RobotsController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "robot"=>{"name"=>""}, "commit"=>"Create Robot"}
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 4.2ms | Allocations: 1270)
+  Rendered layout layouts/application.html.erb (Duration: 15.4ms | Allocations: 2416)
+Completed 200 OK in 18ms (Views: 16.4ms | ActiveRecord: 0.2ms | Allocations: 3593)
+
+
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (1.3ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "do the dishes"], ["eta", 1000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 11:56:02.920805"], ["updated_at", "2024-05-02 11:56:02.920805"]]
+  [1m[36mTRANSACTION (1.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (0.8ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "sweep the house"], ["eta", 3000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 11:56:02.926108"], ["updated_at", "2024-05-02 11:56:02.926108"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (1.0ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "do the laundry"], ["eta", 10000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 11:56:02.929216"], ["updated_at", "2024-05-02 11:56:02.929216"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (1.0ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "take out the recycling"], ["eta", 4000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 11:56:02.932019"], ["updated_at", "2024-05-02 11:56:02.932019"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (1.0ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "make a sammich"], ["eta", 7000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 11:56:02.935512"], ["updated_at", "2024-05-02 11:56:02.935512"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (1.2ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "mow the lawn"], ["eta", 20000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 11:56:02.938674"], ["updated_at", "2024-05-02 11:56:02.938674"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (0.7ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "rake the leaves"], ["eta", 18000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 11:56:02.942489"], ["updated_at", "2024-05-02 11:56:02.942489"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (0.7ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "give the dog a bath"], ["eta", 14500], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 11:56:02.944823"], ["updated_at", "2024-05-02 11:56:02.944823"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (0.6ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "bake some cookies"], ["eta", 8000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 11:56:02.947702"], ["updated_at", "2024-05-02 11:56:02.947702"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mTask Create (0.7ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at") VALUES (?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "wash the car"], ["eta", 20000], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 11:56:02.949856"], ["updated_at", "2024-05-02 11:56:02.949856"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (1.0ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Unipedal"], ["created_at", "2024-05-02 11:56:02.957536"], ["updated_at", "2024-05-02 11:56:02.957536"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (0.7ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Bipedal"], ["created_at", "2024-05-02 11:56:02.960293"], ["updated_at", "2024-05-02 11:56:02.960293"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (0.7ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Quadrupedal"], ["created_at", "2024-05-02 11:56:02.962445"], ["updated_at", "2024-05-02 11:56:02.962445"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (0.8ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Arachnid"], ["created_at", "2024-05-02 11:56:02.964542"], ["updated_at", "2024-05-02 11:56:02.964542"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (0.7ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Radial"], ["created_at", "2024-05-02 11:56:02.966876"], ["updated_at", "2024-05-02 11:56:02.966876"]]
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[36mRobotType Create (0.7ms)[0m  [1m[32mINSERT INTO "robot_types" ("name", "created_at", "updated_at") VALUES (?, ?, ?) RETURNING "id"[0m  [["name", "Aeronautical"], ["created_at", "2024-05-02 11:56:02.968986"], ["updated_at", "2024-05-02 11:56:02.968986"]]
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+Started GET "/robots/new" for ::1 at 2024-05-02 07:56:05 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 6.1ms | Allocations: 3361)
+  Rendered layout layouts/application.html.erb (Duration: 7.8ms | Allocations: 4512)
+Completed 200 OK in 9ms (Views: 8.0ms | ActiveRecord: 0.4ms | Allocations: 4782)
+
+

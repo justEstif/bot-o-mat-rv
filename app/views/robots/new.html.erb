@@ -2,9 +2,8 @@
   <%= form.label :name %>
   <%= form.text_field :name %>
 
-  <%= form.label :robot_type %>
-  <%= form.select :robot_type,
-              Robot.robot_types.keys.map { |type| [type.humanize, type] } %>
+  <%= form.label :robot_type_id, "Robot Type" %>
+  <%= form.collection_select :robot_type_id, RobotType.all, :id, :name %>
 
   <%= form.submit "Create Robot" %>
 <% end %>

@@ -1,6 +1,20 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.all
+    @tasks = Task.where(completed: false)
+  end
+
+  def new
+    @task = Task.new
+  end
+
+  def create
+    @task = Task.new(task_params)
+
+    if @task.save
+      redirect_to tasks_path, notice: "Task was successfully created."
+    else
+      render :new
+    end
   end
 
   def assign_tasks
@@ -31,5 +45,9 @@ class TasksController < ApplicationController
 
     flash[:notice] = "Tasks completed successfully"
     redirect_to @robot
+  end
+
+  def task_params
+    params.require(:task).permit(:description, :eta, :robot_type_id)
   end
 end

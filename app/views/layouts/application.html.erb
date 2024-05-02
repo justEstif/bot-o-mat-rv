@@ -16,19 +16,17 @@
   </head>
 
   <body>
-
     <header class="container">
-      <hgroup>
-        <h1>Red Ventures</h1>
-        <p>Made by Estifanos Beyene</p>
-      </hgroup>
       <nav>
         <ul>
           <li><%= link_to "Home", root_path %></li>
           <li><%= link_to "Tasks", tasks_path %></li>
-          <li><%= link_to "New Robot", new_robot_path %></li>
         </ul>
       </nav>
+      <hgroup>
+        <h4>Bot-o-Mat</h4>
+        <p>Made by Estifanos Beyene</p>
+      </hgroup>
     </header>
     <main class="container">
       <%= yield %>

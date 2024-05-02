@@ -5021,3 +5021,858 @@ Processing by RobotsController#new as HTML
 Completed 200 OK in 9ms (Views: 8.0ms | ActiveRecord: 0.4ms | Allocations: 4782)
 
 
+  [1m[36mActiveRecord::InternalMetadata Load (0.2ms)[0m  [1m[34mSELECT * FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = ? ORDER BY "ar_internal_metadata"."key" ASC LIMIT 1[0m  [[nil, "environment"]]
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Migrating to AddRobotTypeToTasks (20240502115945)
+  [1m[36mTRANSACTION (0.0ms)[0m  [1m[36mbegin transaction[0m
+  [1m[35m (2.5ms)[0m  [1m[35mALTER TABLE "tasks" ADD "robot_type_id" integer[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_type_id" ON "tasks" ("robot_type_id")[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = ON[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = OFF[0m
+  [1m[35m (0.2ms)[0m  [1m[35mCREATE TEMPORARY TABLE "atasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT 0, "robot_id" integer DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL)[0m
+  [1m[35m (0.4ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_robot_type_id" ON "atasks" ("robot_type_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "tindex_atasks_on_robot_id" ON "atasks" ("robot_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "atasks" ("id","description","eta","completed","robot_id","created_at","updated_at","robot_type_id")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at","robot_type_id" FROM "tasks"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "tasks"[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE TABLE "tasks" ("id" integer PRIMARY KEY AUTOINCREMENT NOT NULL, "description" varchar DEFAULT NULL, "eta" integer DEFAULT NULL, "completed" boolean DEFAULT 0, "robot_id" integer DEFAULT NULL, "created_at" datetime(6) NOT NULL, "updated_at" datetime(6) NOT NULL, "robot_type_id" integer DEFAULT NULL, CONSTRAINT "fk_rails_c74799e152"
+FOREIGN KEY ("robot_id")
+  REFERENCES "robots" ("id")
+, CONSTRAINT "fk_rails_6b84856324"
+FOREIGN KEY ("robot_type_id")
+  REFERENCES "robot_types" ("id")
+)[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_id" ON "tasks" ("robot_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[35mCREATE INDEX "index_tasks_on_robot_type_id" ON "tasks" ("robot_type_id")[0m
+  [1m[35m (0.1ms)[0m  [1m[32mINSERT INTO "tasks" ("id","description","eta","completed","robot_id","created_at","updated_at","robot_type_id")
+                     SELECT "id","description","eta","completed","robot_id","created_at","updated_at","robot_type_id" FROM "atasks"[0m
+  [1m[35m (0.2ms)[0m  [1m[35mDROP TABLE "atasks"[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA defer_foreign_keys = 0[0m
+  [1m[35m (0.0ms)[0m  [1m[35mPRAGMA foreign_keys = 1[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.1ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ('20240502115945') RETURNING "version"[0m
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mcommit transaction[0m
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Started GET "/tasks" for ::1 at 2024-05-02 08:05:22 -0400
+  [1m[36mActiveRecord::SchemaMigration Load (0.1ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:14
+  Rendered tasks/index.html.erb within layouts/application (Duration: 21.1ms | Allocations: 16492)
+  Rendered layout layouts/application.html.erb (Duration: 63.8ms | Allocations: 50274)
+Completed 200 OK in 82ms (Views: 63.5ms | ActiveRecord: 2.3ms | Allocations: 61551)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:05:23 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 14.7ms | Allocations: 9955)
+  Rendered layout layouts/application.html.erb (Duration: 15.9ms | Allocations: 11105)
+Completed 200 OK in 17ms (Views: 16.0ms | ActiveRecord: 0.3ms | Allocations: 11358)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:20:27 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.7ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 9.3ms | Allocations: 8340)
+  Rendered layout layouts/application.html.erb (Duration: 18.7ms | Allocations: 22892)
+Completed 200 OK in 20ms (Views: 18.8ms | ActiveRecord: 1.1ms | Allocations: 23608)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:20:29 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 4.0ms | Allocations: 3909)
+  Rendered layout layouts/application.html.erb (Duration: 6.2ms | Allocations: 5058)
+Completed 200 OK in 9ms (Views: 8.3ms | ActiveRecord: 0.1ms | Allocations: 5307)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:20:40 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 10.5ms | Allocations: 8603)
+  Rendered layout layouts/application.html.erb (Duration: 18.2ms | Allocations: 22970)
+Completed 200 OK in 20ms (Views: 17.7ms | ActiveRecord: 1.8ms | Allocations: 23684)
+
+
+Started POST "/tasks/new" for ::1 at 2024-05-02 08:20:49 -0400
+  
+ActionController::RoutingError (No route matches [POST] "/tasks/new"):
+  
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:20:49 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 2.5ms | Allocations: 3941)
+  Rendered layout layouts/application.html.erb (Duration: 4.3ms | Allocations: 5105)
+Completed 200 OK in 5ms (Views: 4.7ms | ActiveRecord: 0.1ms | Allocations: 5355)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:20:51 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:14
+  Rendered tasks/index.html.erb within layouts/application (Duration: 8.6ms | Allocations: 6322)
+  Rendered layout layouts/application.html.erb (Duration: 10.9ms | Allocations: 7753)
+Completed 200 OK in 21ms (Views: 12.4ms | ActiveRecord: 0.6ms | Allocations: 9175)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:20:53 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.3ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 3.5ms | Allocations: 1681)
+  Rendered layout layouts/application.html.erb (Duration: 4.9ms | Allocations: 2833)
+Completed 200 OK in 11ms (Views: 5.8ms | ActiveRecord: 0.5ms | Allocations: 6523)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:20:53 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:12
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.2ms | Allocations: 708)
+  Rendered layout layouts/application.html.erb (Duration: 3.5ms | Allocations: 2146)
+Completed 200 OK in 4ms (Views: 3.8ms | ActiveRecord: 0.1ms | Allocations: 2508)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:20:56 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:14
+  Rendered tasks/index.html.erb within layouts/application (Duration: 1.8ms | Allocations: 627)
+  Rendered layout layouts/application.html.erb (Duration: 6.5ms | Allocations: 2036)
+Completed 200 OK in 8ms (Views: 7.0ms | ActiveRecord: 0.2ms | Allocations: 2298)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:20:57 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 4.3ms | Allocations: 1252)
+  Rendered layout layouts/application.html.erb (Duration: 6.2ms | Allocations: 2401)
+Completed 200 OK in 7ms (Views: 6.8ms | ActiveRecord: 0.1ms | Allocations: 2664)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:21:02 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 3.8ms | Allocations: 1276)
+  Rendered layout layouts/application.html.erb (Duration: 7.5ms | Allocations: 2425)
+Completed 200 OK in 9ms (Views: 8.2ms | ActiveRecord: 0.2ms | Allocations: 2688)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:21:03 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 5.4ms | Allocations: 3918)
+  Rendered layout layouts/application.html.erb (Duration: 7.4ms | Allocations: 5067)
+Completed 200 OK in 8ms (Views: 7.9ms | ActiveRecord: 0.1ms | Allocations: 5317)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:21:06 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:12
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.2ms | Allocations: 391)
+  Rendered layout layouts/application.html.erb (Duration: 5.0ms | Allocations: 1841)
+Completed 200 OK in 6ms (Views: 5.7ms | ActiveRecord: 0.1ms | Allocations: 2102)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:21:07 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 2.7ms | Allocations: 1261)
+  Rendered layout layouts/application.html.erb (Duration: 4.3ms | Allocations: 2410)
+Completed 200 OK in 5ms (Views: 4.6ms | ActiveRecord: 0.1ms | Allocations: 2673)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:21:27 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:12
+  Rendered robots/index.html.erb within layouts/application (Duration: 2.5ms | Allocations: 1006)
+  Rendered layout layouts/application.html.erb (Duration: 12.0ms | Allocations: 15856)
+Completed 200 OK in 21ms (Views: 10.8ms | ActiveRecord: 2.3ms | Allocations: 18123)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:21:44 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.9ms | Allocations: 1082)
+  Rendered layout layouts/application.html.erb (Duration: 9.5ms | Allocations: 15682)
+Completed 200 OK in 14ms (Views: 9.5ms | ActiveRecord: 1.1ms | Allocations: 17942)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:21:50 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 2.1ms | Allocations: 1087)
+  Rendered layout layouts/application.html.erb (Duration: 12.1ms | Allocations: 15890)
+Completed 200 OK in 22ms (Views: 13.3ms | ActiveRecord: 1.1ms | Allocations: 18163)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:21:56 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:14
+  Rendered tasks/index.html.erb within layouts/application (Duration: 8.0ms | Allocations: 5292)
+  Rendered layout layouts/application.html.erb (Duration: 9.7ms | Allocations: 6721)
+Completed 200 OK in 14ms (Views: 9.6ms | ActiveRecord: 0.8ms | Allocations: 8277)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:21:58 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.1ms | Allocations: 422)
+  Rendered layout layouts/application.html.erb (Duration: 3.4ms | Allocations: 1821)
+Completed 200 OK in 4ms (Views: 3.8ms | ActiveRecord: 0.1ms | Allocations: 2083)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:21:59 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:14
+  Rendered tasks/index.html.erb within layouts/application (Duration: 1.6ms | Allocations: 626)
+  Rendered layout layouts/application.html.erb (Duration: 4.5ms | Allocations: 2040)
+Completed 200 OK in 6ms (Views: 5.1ms | ActiveRecord: 0.1ms | Allocations: 2302)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:21:59 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 0.7ms | Allocations: 421)
+  Rendered layout layouts/application.html.erb (Duration: 2.5ms | Allocations: 1829)
+Completed 200 OK in 3ms (Views: 2.8ms | ActiveRecord: 0.0ms | Allocations: 2091)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:22:01 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:14
+  Rendered tasks/index.html.erb within layouts/application (Duration: 2.7ms | Allocations: 625)
+  Rendered layout layouts/application.html.erb (Duration: 5.7ms | Allocations: 2021)
+Completed 200 OK in 7ms (Views: 6.4ms | ActiveRecord: 0.2ms | Allocations: 2283)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:22:03 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 15.2ms | Allocations: 10281)
+  Rendered layout layouts/application.html.erb (Duration: 16.6ms | Allocations: 11415)
+Completed 200 OK in 18ms (Views: 16.9ms | ActiveRecord: 0.3ms | Allocations: 11666)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:22:03 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.3ms | Allocations: 422)
+  Rendered layout layouts/application.html.erb (Duration: 4.9ms | Allocations: 1815)
+Completed 200 OK in 6ms (Views: 5.4ms | ActiveRecord: 0.1ms | Allocations: 2078)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:22:05 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 4.1ms | Allocations: 1528)
+  Rendered layout layouts/application.html.erb (Duration: 5.7ms | Allocations: 2661)
+Completed 200 OK in 11ms (Views: 6.2ms | ActiveRecord: 0.5ms | Allocations: 5257)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:22:59 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 3.3ms | Allocations: 1085)
+  Rendered layout layouts/application.html.erb (Duration: 16.8ms | Allocations: 15910)
+Completed 200 OK in 23ms (Views: 17.9ms | ActiveRecord: 1.4ms | Allocations: 18188)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:23:50 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 2.2ms | Allocations: 1081)
+  Rendered layout layouts/application.html.erb (Duration: 10.4ms | Allocations: 15696)
+Completed 200 OK in 14ms (Views: 10.4ms | ActiveRecord: 1.0ms | Allocations: 17953)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:24:00 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.9ms | Allocations: 1085)
+  Rendered layout layouts/application.html.erb (Duration: 12.3ms | Allocations: 15883)
+Completed 200 OK in 16ms (Views: 12.4ms | ActiveRecord: 0.9ms | Allocations: 18160)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:24:25 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.7ms | Allocations: 1081)
+  Rendered layout layouts/application.html.erb (Duration: 13.6ms | Allocations: 15760)
+Completed 200 OK in 17ms (Views: 13.6ms | ActiveRecord: 0.9ms | Allocations: 18017)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:24:31 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.8ms | Allocations: 1085)
+  Rendered layout layouts/application.html.erb (Duration: 10.5ms | Allocations: 15736)
+Completed 200 OK in 15ms (Views: 10.5ms | ActiveRecord: 1.0ms | Allocations: 18011)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:24:48 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:13
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.8ms | Allocations: 1083)
+  Rendered layout layouts/application.html.erb (Duration: 11.2ms | Allocations: 15876)
+Completed 200 OK in 15ms (Views: 11.6ms | ActiveRecord: 0.9ms | Allocations: 18143)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:26:05 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.0ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  Rendered robots/index.html.erb within layouts/application (Duration: 2.0ms | Allocations: 1087)
+  Rendered layout layouts/application.html.erb (Duration: 11.1ms | Allocations: 15890)
+Completed 200 OK in 18ms (Views: 11.7ms | ActiveRecord: 0.9ms | Allocations: 18155)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:26:06 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 6.6ms | Allocations: 4873)
+  Rendered layout layouts/application.html.erb (Duration: 7.9ms | Allocations: 6016)
+Completed 200 OK in 18ms (Views: 8.0ms | ActiveRecord: 1.3ms | Allocations: 8862)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:26:07 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 4.3ms | Allocations: 1274)
+  Rendered layout layouts/application.html.erb (Duration: 6.6ms | Allocations: 2407)
+Completed 200 OK in 8ms (Views: 7.0ms | ActiveRecord: 0.1ms | Allocations: 2672)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:29:04 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 5.5ms | Allocations: 1267)
+  Rendered layout layouts/application.html.erb (Duration: 8.1ms | Allocations: 2400)
+Completed 200 OK in 10ms (Views: 8.8ms | ActiveRecord: 0.1ms | Allocations: 2665)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:29:05 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.4ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:14
+  Rendered tasks/index.html.erb within layouts/application (Duration: 6.4ms | Allocations: 4985)
+  Rendered layout layouts/application.html.erb (Duration: 9.0ms | Allocations: 6401)
+Completed 200 OK in 13ms (Views: 9.5ms | ActiveRecord: 0.7ms | Allocations: 7918)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:29:05 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 3.9ms | Allocations: 4701)
+  Rendered layout layouts/application.html.erb (Duration: 5.7ms | Allocations: 5834)
+Completed 200 OK in 10ms (Views: 9.6ms | ActiveRecord: 0.1ms | Allocations: 6085)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:30:07 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 8.3ms | Allocations: 8699)
+  Rendered layout layouts/application.html.erb (Duration: 17.0ms | Allocations: 23215)
+Completed 200 OK in 19ms (Views: 17.1ms | ActiveRecord: 1.2ms | Allocations: 23929)
+
+
+Started POST "/tasks/new" for ::1 at 2024-05-02 08:30:20 -0400
+  
+ActionController::RoutingError (No route matches [POST] "/tasks/new"):
+  
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:30:20 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 2.9ms | Allocations: 3927)
+  Rendered layout layouts/application.html.erb (Duration: 3.9ms | Allocations: 5075)
+Completed 200 OK in 5ms (Views: 4.2ms | ActiveRecord: 0.1ms | Allocations: 5326)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:30:21 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.5ms | Allocations: 772)
+  Rendered layout layouts/application.html.erb (Duration: 3.7ms | Allocations: 2203)
+Completed 200 OK in 10ms (Views: 4.4ms | ActiveRecord: 0.1ms | Allocations: 3805)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:30:23 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:14
+  Rendered tasks/index.html.erb within layouts/application (Duration: 6.0ms | Allocations: 5225)
+  Rendered layout layouts/application.html.erb (Duration: 7.8ms | Allocations: 6616)
+Completed 200 OK in 15ms (Views: 7.8ms | ActiveRecord: 0.6ms | Allocations: 7986)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:30:24 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  Rendered robots/index.html.erb within layouts/application (Duration: 0.7ms | Allocations: 422)
+  Rendered layout layouts/application.html.erb (Duration: 2.2ms | Allocations: 1809)
+Completed 200 OK in 3ms (Views: 2.5ms | ActiveRecord: 0.0ms | Allocations: 2069)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:30:25 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:14
+  Rendered tasks/index.html.erb within layouts/application (Duration: 1.5ms | Allocations: 626)
+  Rendered layout layouts/application.html.erb (Duration: 3.5ms | Allocations: 2034)
+Completed 200 OK in 4ms (Views: 3.9ms | ActiveRecord: 0.1ms | Allocations: 2296)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:30:47 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 5.8ms | Allocations: 3932)
+  Rendered layout layouts/application.html.erb (Duration: 10.3ms | Allocations: 5065)
+Completed 200 OK in 12ms (Views: 11.0ms | ActiveRecord: 0.1ms | Allocations: 5316)
+
+
+Started POST "/tasks/new" for ::1 at 2024-05-02 08:30:53 -0400
+  
+ActionController::RoutingError (No route matches [POST] "/tasks/new"):
+  
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:30:53 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 11.0ms | Allocations: 3917)
+  Rendered layout layouts/application.html.erb (Duration: 16.5ms | Allocations: 5065)
+Completed 200 OK in 19ms (Views: 18.0ms | ActiveRecord: 0.2ms | Allocations: 5316)
+
+
+Started POST "/tasks/new" for ::1 at 2024-05-02 08:31:49 -0400
+  
+ActionController::RoutingError (No route matches [POST] "/tasks/new"):
+  
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:31:49 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 13.9ms | Allocations: 8678)
+  Rendered layout layouts/application.html.erb (Duration: 22.6ms | Allocations: 23194)
+Completed 200 OK in 25ms (Views: 22.4ms | ActiveRecord: 1.8ms | Allocations: 23865)
+
+
+Started POST "/tasks/new" for ::1 at 2024-05-02 08:32:44 -0400
+  
+ActionController::RoutingError (No route matches [POST] "/tasks/new"):
+  
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:32:44 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 9.9ms | Allocations: 8067)
+  Rendered layout layouts/application.html.erb (Duration: 26.6ms | Allocations: 22584)
+Completed 200 OK in 54ms (Views: 29.3ms | ActiveRecord: 14.4ms | Allocations: 28502)
+
+
+Started POST "/tasks/new" for ::1 at 2024-05-02 08:33:03 -0400
+  
+ActionController::RoutingError (No route matches [POST] "/tasks/new"):
+  
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:33:03 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 15.3ms | Allocations: 8122)
+  Rendered layout layouts/application.html.erb (Duration: 28.6ms | Allocations: 22640)
+Completed 200 OK in 45ms (Views: 30.0ms | ActiveRecord: 5.8ms | Allocations: 28557)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:34:57 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 42.0ms | Allocations: 5188)
+  Rendered layout layouts/application.html.erb (Duration: 55.1ms | Allocations: 19743)
+Completed 200 OK in 67ms (Views: 57.4ms | ActiveRecord: 1.6ms | Allocations: 25704)
+
+
+Started POST "/tasks" for ::1 at 2024-05-02 08:35:05 -0400
+Processing by TasksController#create as TURBO_STREAM
+  Parameters: {"authenticity_token"=>"[FILTERED]", "task"=>{"description"=>"Testing", "eta"=>"21", "robot_type_id"=>"2"}, "commit"=>"Create Task"}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[36mbegin transaction[0m
+  ↳ app/controllers/tasks_controller.rb:13:in `create'
+  [1m[36mTask Create (1.6ms)[0m  [1m[32mINSERT INTO "tasks" ("description", "eta", "completed", "robot_id", "created_at", "updated_at", "robot_type_id") VALUES (?, ?, ?, ?, ?, ?, ?) RETURNING "id"[0m  [["description", "Testing"], ["eta", 21], ["completed", 0], ["robot_id", nil], ["created_at", "2024-05-02 12:35:05.778779"], ["updated_at", "2024-05-02 12:35:05.778779"], ["robot_type_id", 2]]
+  ↳ app/controllers/tasks_controller.rb:13:in `create'
+  [1m[36mTRANSACTION (10.1ms)[0m  [1m[36mcommit transaction[0m
+  ↳ app/controllers/tasks_controller.rb:13:in `create'
+Redirected to http://localhost:3000/tasks
+Completed 302 Found in 32ms (ActiveRecord: 11.7ms | Allocations: 4046)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:35:05 -0400
+Processing by TasksController#index as TURBO_STREAM
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:14
+  Rendered tasks/index.html.erb within layouts/application (Duration: 14.2ms | Allocations: 2887)
+  Rendered layout layouts/application.html.erb (Duration: 16.3ms | Allocations: 4309)
+Completed 200 OK in 18ms (Views: 16.6ms | ActiveRecord: 0.4ms | Allocations: 4712)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:37:48 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:14
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:27
+  Rendered tasks/index.html.erb within layouts/application (Duration: 14.4ms | Allocations: 12623)
+  Rendered layout layouts/application.html.erb (Duration: 21.9ms | Allocations: 27325)
+Completed 200 OK in 28ms (Views: 22.3ms | ActiveRecord: 1.8ms | Allocations: 30593)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:38:01 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:14
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:20
+  Rendered tasks/index.html.erb within layouts/application (Duration: 19.9ms | Allocations: 9346)
+  Rendered layout layouts/application.html.erb (Duration: 43.0ms | Allocations: 24175)
+Completed 200 OK in 62ms (Views: 44.5ms | ActiveRecord: 4.4ms | Allocations: 27127)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:38:08 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 3.1ms | Allocations: 1875)
+  Rendered layout layouts/application.html.erb (Duration: 6.1ms | Allocations: 3008)
+Completed 200 OK in 8ms (Views: 7.1ms | ActiveRecord: 0.1ms | Allocations: 3347)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:38:12 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 6.3ms | Allocations: 1459)
+  Rendered layout layouts/application.html.erb (Duration: 8.5ms | Allocations: 2592)
+Completed 200 OK in 9ms (Views: 8.9ms | ActiveRecord: 0.2ms | Allocations: 2859)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:38:39 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:9
+  Rendered tasks/new.html.erb within layouts/application (Duration: 7.5ms | Allocations: 5134)
+  Rendered layout layouts/application.html.erb (Duration: 19.0ms | Allocations: 19643)
+Completed 200 OK in 30ms (Views: 20.3ms | ActiveRecord: 2.0ms | Allocations: 25568)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:38:52 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:15
+  [1m[36mRobotType Load (0.3ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:21
+  Rendered tasks/index.html.erb within layouts/application (Duration: 12.3ms | Allocations: 9320)
+  Rendered layout layouts/application.html.erb (Duration: 24.4ms | Allocations: 24122)
+Completed 200 OK in 30ms (Views: 24.4ms | ActiveRecord: 2.2ms | Allocations: 27066)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:38:59 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.1ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:16
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:22
+  Rendered tasks/index.html.erb within layouts/application (Duration: 12.3ms | Allocations: 9376)
+  Rendered layout layouts/application.html.erb (Duration: 20.0ms | Allocations: 24111)
+Completed 200 OK in 25ms (Views: 20.6ms | ActiveRecord: 1.6ms | Allocations: 27063)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:39:19 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:16
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:22
+  Rendered tasks/index.html.erb within layouts/application (Duration: 10.9ms | Allocations: 9277)
+  Rendered layout layouts/application.html.erb (Duration: 20.9ms | Allocations: 24064)
+Completed 200 OK in 27ms (Views: 21.8ms | ActiveRecord: 1.9ms | Allocations: 27014)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:39:23 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.4ms | Allocations: 774)
+  Rendered layout layouts/application.html.erb (Duration: 2.9ms | Allocations: 2209)
+Completed 200 OK in 8ms (Views: 3.5ms | ActiveRecord: 0.1ms | Allocations: 3810)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:39:24 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:16
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:22
+  Rendered tasks/index.html.erb within layouts/application (Duration: 8.6ms | Allocations: 1181)
+  Rendered layout layouts/application.html.erb (Duration: 10.5ms | Allocations: 2611)
+Completed 200 OK in 12ms (Views: 10.9ms | ActiveRecord: 0.2ms | Allocations: 2903)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:39:25 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  Rendered robots/index.html.erb within layouts/application (Duration: 1.4ms | Allocations: 421)
+  Rendered layout layouts/application.html.erb (Duration: 5.0ms | Allocations: 1835)
+Completed 200 OK in 7ms (Views: 5.8ms | ActiveRecord: 0.1ms | Allocations: 2097)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:39:26 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.3ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 5.3ms | Allocations: 3295)
+  Rendered layout layouts/application.html.erb (Duration: 7.7ms | Allocations: 4440)
+Completed 200 OK in 9ms (Views: 7.9ms | ActiveRecord: 0.2ms | Allocations: 4779)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:39:52 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  Rendered robots/index.html.erb within layouts/application (Duration: 9.6ms | Allocations: 1085)
+  Rendered layout layouts/application.html.erb (Duration: 51.2ms | Allocations: 15875)
+Completed 200 OK in 60ms (Views: 55.7ms | ActiveRecord: 1.0ms | Allocations: 18150)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:41:30 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:6
+  Rendered robots/new.html.erb within layouts/application (Duration: 8.8ms | Allocations: 6443)
+  Rendered layout layouts/application.html.erb (Duration: 12.4ms | Allocations: 7590)
+Completed 200 OK in 26ms (Views: 12.4ms | ActiveRecord: 0.9ms | Allocations: 14553)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:41:52 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:10
+  Rendered robots/new.html.erb within layouts/application (Duration: 6.1ms | Allocations: 6561)
+  Rendered layout layouts/application.html.erb (Duration: 19.4ms | Allocations: 20933)
+Completed 200 OK in 29ms (Views: 20.4ms | ActiveRecord: 2.2ms | Allocations: 26831)
+
+
+Started GET "/robots/new" for ::1 at 2024-05-02 08:42:08 -0400
+Processing by RobotsController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.1ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/robots/new.html.erb:10
+  Rendered robots/new.html.erb within layouts/application (Duration: 7.0ms | Allocations: 6520)
+  Rendered layout layouts/application.html.erb (Duration: 15.6ms | Allocations: 20902)
+Completed 200 OK in 24ms (Views: 17.2ms | ActiveRecord: 1.5ms | Allocations: 26863)
+
+
+Started GET "/tasks" for ::1 at 2024-05-02 08:42:09 -0400
+Processing by TasksController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks" WHERE "tasks"."completed" = ?[0m  [["completed", 0]]
+  ↳ app/views/tasks/index.html.erb:16
+  [1m[36mRobotType Load (0.3ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types" WHERE "robot_types"."id" = ? LIMIT ?[0m  [["id", 2], ["LIMIT", 1]]
+  ↳ app/views/tasks/index.html.erb:22
+  Rendered tasks/index.html.erb within layouts/application (Duration: 4.8ms | Allocations: 3020)
+  Rendered layout layouts/application.html.erb (Duration: 6.8ms | Allocations: 4451)
+Completed 200 OK in 9ms (Views: 7.2ms | ActiveRecord: 0.5ms | Allocations: 5011)
+
+
+Started GET "/tasks/new" for ::1 at 2024-05-02 08:42:10 -0400
+Processing by TasksController#new as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering tasks/new.html.erb within layouts/application
+  [1m[36mRobotType Load (0.2ms)[0m  [1m[34mSELECT "robot_types".* FROM "robot_types"[0m
+  ↳ app/views/tasks/new.html.erb:13
+  Rendered tasks/new.html.erb within layouts/application (Duration: 6.1ms | Allocations: 1729)
+  Rendered layout layouts/application.html.erb (Duration: 8.4ms | Allocations: 2862)
+Completed 200 OK in 10ms (Views: 8.9ms | ActiveRecord: 0.2ms | Allocations: 3190)
+
+
+Started GET "/" for ::1 at 2024-05-02 08:42:12 -0400
+Processing by RobotsController#index as HTML
+  Rendering layout layouts/application.html.erb
+  Rendering robots/index.html.erb within layouts/application
+  [1m[36mRobot Load (0.1ms)[0m  [1m[34mSELECT "robots".* FROM "robots"[0m
+  ↳ app/views/robots/index.html.erb:15
+  Rendered robots/index.html.erb within layouts/application (Duration: 2.2ms | Allocations: 768)
+  Rendered layout layouts/application.html.erb (Duration: 3.7ms | Allocations: 2196)
+Completed 200 OK in 6ms (Views: 4.0ms | ActiveRecord: 0.1ms | Allocations: 3653)
+
+

@@ -1,12 +1,15 @@
-<h1>All Tasks</h1>
+<section>
+  <h1>All Tasks</h1>
+  <%= link_to "New Task", new_task_path %>
+</section>
 
 <table>
   <thead>
     <tr>
       <th>Description</th>
       <th>ETA</th>
-      <th>Completed</th>
       <th>Assigned</th>
+      <th>Robot Type</th>
     </tr>
   </thead>
   <tbody>
@@ -16,10 +19,10 @@
         <td><%= task.eta %></td>
         <td><%= task.completed ? "Yes" : "No" %></td>
         <td>
-          <% if task.robot.present? %>
-            <%= task.robot.name %>
+          <% if task.robot_type %>
+            <%= task.robot_type.name %>
           <% else %>
-            Unassigned
+            None Specified
           <% end %>
         </td>
       </tr>

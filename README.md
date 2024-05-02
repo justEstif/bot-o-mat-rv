@@ -17,7 +17,7 @@
 ### Setting up application
 
 ```bash
-git clone https://github.com/justEstif/bot-o-mat-justEstif
+git clone https://github.com/justEstif/bot-o-mat-justEstif.git
 cd bot-o-mat-justEstif
 bundle install  # install dependencies
 bin/rails db:migrate # run migrations

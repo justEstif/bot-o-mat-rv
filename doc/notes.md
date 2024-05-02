@@ -157,17 +157,29 @@ Tasks have a description and an estimated time to complete.
 Be creative and have fun! Use this list or create your own features.
 
 - Allow users to create multiple robots at one time
-- Create a leaderboard for tasks completed by each Robot
-- Create tasks specific for each robot type, this could work in conjunction with
-  the leaderboard. For e.g. robots that are assigned tasks that their type can’t
-  perform won’t get “credit” for finishing the task.
+- [x] Create a leaderboard for tasks completed by each Robot
+- [x] Create tasks specific for each robot type, this could work in conjunction
+      with the leaderboard. For e.g. robots that are assigned tasks that their
+      type can’t perform won’t get “credit” for finishing the task.
+  - if a robot is assigned a task with out a robot type defined, it should be
+    able to perform it
+  - else if the task has a robot type, the robot is only able to perform it if
+    it is the same robot type
   - [x] add an optional robot_type to tasks, and if the robots are assigned the
         task the won't be able to finish it
 
-- Add persistance for tasks, bots and leaderboard stats
+- Add persistance for tasks, bots and leaderboard stats i'm using sqlite to
+  persist the task, bots and leaderboard stats
   - [x] task
   - [x] bots
-  - [ ] leaderboard
+  - [x] leaderboard
+
+- Points of improvements
+
+- If a robot is deleted, so are all the tasks it has completed.
+  - It might be better to archive the robot, or just mark it as deleted.
+
+- General UI improvements could be made.
 
 ## Privacy Guidelines
 

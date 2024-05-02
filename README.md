@@ -1,109 +1,92 @@
-# BOT-O-MAT
+# BOT-O-MAT by Estifanos Beyene
 
-Use any language to complete this challenge. The implementation is up to you: it
-can be a command-line application or have a graphical interface.
+## Technologies
 
-Your application should collect a name and robot type from the types we list
-below. For each, it should create a Robot of the type the user chooses, e.g.
-Larry, Bipedal.
+- Frontend: Pico CSS (CDN)
+- Backend: Ruby on Rails
+- Database: SQLite
 
-- [x] Given the list of tasks below, your application should then assign the
-      Robot a set of five tasks, all of which complete after a duration that we
-      show in milliseconds.
+## How to use
 
-- [x] Collect a name and robot type from user. x Instantiate a Robot of the type
-      provided by the user with the name provided by the user
+### Prerequisites
 
-- for example: Bipedal, Larry
-- [x] Set up methods on Robot to complete tasks from the provided list
+- Ruby
+- Rails
+- Git
 
-## Robot
+### Setting up application
 
-Robot completes tasks and removes them from the list when they are done (i.e.
-enough time has passed since starting the task).
-
-## Tasks
-
-Tasks have a description and an estimated time to complete.
-
-```json
-[
-  {
-    "description": "do the dishes",
-    "eta": 1000
-  },
-  {
-    "description": "sweep the house",
-    "eta": 3000
-  },
-  {
-    "description": "do the laundry",
-    "eta": 10000
-  },
-  {
-    "description": "take out the recycling",
-    "eta": 4000
-  },
-  {
-    "description": "make a sammich",
-    "eta": 7000
-  },
-  {
-    "description": "mow the lawn",
-    "eta": 20000
-  },
-  {
-    "description": "rake the leaves",
-    "eta": 18000
-  },
-  {
-    "description": "give the dog a bath",
-    "eta": 14500
-  },
-  {
-    "description": "bake some cookies",
-    "eta": 8000
-  },
-  {
-    "description": "wash the car",
-    "eta": 20000
-  }
-]
+```bash
+git clone https://github.com/justEstif/bot-o-mat-justEstif
+cd bot-o-mat-justEstif
+bundle install  # install dependencies
+bin/rails db:migrate # run migrations
+bin/rails db:seed # seed database with sample data
+bin/rails server # start rails server
 ```
 
-## Types
+### API Example (Robot Creation)
 
+```bash
+curl -X POST http://localhost:3000/api/robots \
+-H 'Content-Type: application/json' -d '[
+    {
+        "name": "Robot A",
+        "robot_type_id": 1
+    },
+    {
+        "name": "Robot B",
+        "robot_type_id": 2
+    },
+    {
+        "name": "Robot C",
+        "robot_type_id": 1
+    }
+]'
 ```
-{
-  UNIPEDAL: 'Unipedal',
-  BIPEDAL: 'Bipedal',
-  QUADRUPEDAL: 'Quadrupedal',
-  ARACHNID: 'Arachnid',
-  RADIAL: 'Radial',
-  AERONAUTICAL: 'Aeronautical'
-}
-```
 
-## Features to add once the core functionality is complete
+## Features
 
-Be creative and have fun! Use this list or create your own features.
+- Multiple Robot Creation: Users can create multiple robots simultaneously using
+  curl and an API route.
+- Leaderboard: A leaderboard displays tasks completed by each robot.
+- Robot-Specific Tasks: Robots must match the required type to receive credit
+  for completing tasks.
+- Entity Management: Users can edit and/or delete tasks and robots.
+- Data Persistence: Tasks, robots, and leaderboard statistics are stored using
+  SQLite.
 
-- [ ] Allow users to create multiple robots at one time
-    - using curl and api route to create multiple robots
-- [ ] Create a leaderboard for tasks completed by each Robot
-- [ ] Create tasks specific for each robot type, this could work in conjunction
-      with the leaderboard. For e.g. robots that are assigned tasks that their
-      type can’t perform won’t get “credit” for finishing the task.
-- [ ] Add persistance for tasks, bots and leaderboard stats
+## Note
 
-## Privacy Guidelines
+- The duration required to complete task has been lowered for quicker response;
+  please refer to complete_tasks method in tasks_controller
 
-Due to the creative nature of this project, please do not post the prompt or
-your solution publicly. Feel free to privately fork it to your personal GitHub
-or download it for future reference, as this workspace is cleared every few
-months.
+## Why Ruby on Rails
 
-## Authors
+- Web GUI
+- CLI Interface: Supports a command-line interface.
+- Data Persistence: Provides data storage with SQLite.
+- Built-in supports for all features required for this app
 
-- Scott Hoffman <https://github.com/scottshane>
-- Olivia Osby <https://github.com/oosby>
+## Initial Thought Process
+
+Models
+
+1. Robot
+
+- Manages robot creation and task completion.
+- Supports leaderboard functionality.
+
+2. Task
+
+- Describes tasks with specific durations and completion states.
+
+## Future Enhancements
+
+- Archiving: Explore options for archiving or soft-deleting robots.
+- UI Improvements: Enhance user interface design, utilize Rails flash for alert
+  messages.
+  - For example, showing which task a robot is currently working on. I found
+    this (blog)[https://www.hotrails.dev/turbo-rails/flash-messages-hotwire]
+    that explain how to go about it
+- More API routes for CLI

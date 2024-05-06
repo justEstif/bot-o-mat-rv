@@ -16,9 +16,6 @@
 
 ### Setting up application
 
-- Note: since this is a private repository, cloning is limited to those with
-  access
-
 ```bash
 git clone https://github.com/justEstif/bot-o-mat-rv.git
 cd bot-o-mat-justEstif

@@ -18,7 +18,7 @@
 
 ```bash
 git clone https://github.com/justEstif/bot-o-mat-rv.git
-cd bot-o-mat-justEstif
+cd bot-o-mat-rv
 bundle install  # install dependencies
 bin/rails db:migrate:reset # (optional) reset dev database
 bin/rails db:migrate # run migrations

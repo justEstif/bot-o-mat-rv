@@ -20,7 +20,7 @@
   access
 
 ```bash
-git clone https://github.com/justEstif/bot-o-mat-justEstif.git
+git clone https://github.com/justEstif/bot-o-mat-rv.git
 cd bot-o-mat-justEstif
 bundle install  # install dependencies
 bin/rails db:migrate:reset # (optional) reset dev database
